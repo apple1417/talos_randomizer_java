@@ -1,18 +1,18 @@
 import java.util.ArrayList;
 import java.util.function.Supplier;
 
-public class markerGroup {
+public class MarkerGroup {
     private Supplier<Boolean> test;
     private ArrayList<String> markers;
     private String world;
 
-    public markerGroup(Supplier<Boolean> test, ArrayList<String> markers, String world) {
+    public MarkerGroup(Supplier<Boolean> test, ArrayList<String> markers, String world) {
         this.test = test;
         this.markers = markers;
         this.world = world;
     }
 
-    public markerGroup(Supplier<Boolean> test, ArrayList<String> markers) {
+    public MarkerGroup(Supplier<Boolean> test, ArrayList<String> markers) {
         this(test, markers, null);
     }
 
@@ -21,7 +21,7 @@ public class markerGroup {
     public ArrayList<String> getMarkers() {return markers;}
     public int getSize() {return markers.size();}
 
-    public markerGroup clone() {
-        return new markerGroup(this.test, new ArrayList<String>(markers), this.world);
+    public MarkerGroup clone() {
+        return new MarkerGroup(this.test, new ArrayList<String>(markers), this.world);
     }
 }

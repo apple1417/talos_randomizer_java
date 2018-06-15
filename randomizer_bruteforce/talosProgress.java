@@ -1,10 +1,10 @@
 import java.util.HashMap;
 import java.util.Iterator;
 
-class talosProgress {
+class TalosProgress {
     private HashMap<String, Integer> data;
 
-    public talosProgress(HashMap<String, Integer> options) {
+    public TalosProgress(HashMap<String, Integer> options) {
         data = new HashMap<String, Integer>();
         data.put("Randomizer_Mode", 1);
         data.put("Randomizer_ShowAll", 1);
@@ -13,11 +13,11 @@ class talosProgress {
         data.putAll(options);
     }
 
-    public talosProgress() {
+    public TalosProgress() {
         this(new HashMap<String, Integer>());
     }
 
-    public void SetVar(String key, int val) {
+    public void setVar(String key, int val) {
         data.put(key, val);
     }
 

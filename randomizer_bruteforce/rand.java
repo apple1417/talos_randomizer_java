@@ -1,7 +1,7 @@
-class rand {
+class Rand {
     private long seed;
 
-    public rand(int seed) {
+    public Rand(long seed) {
         this.seed = seed;
     }
 

@@ -3,19 +3,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-class generator_allDefault extends Thread implements Runnable {
+class GeneratorAllDefault extends Thread implements Runnable {
     private Thread t;
     private String threadName;
     private long min;
     private long max;
 
-    generator_allDefault(String name) {
+    GeneratorAllDefault(String name) {
         threadName = name;
     }
 
     public void run() {
         for(long i = min; i <= max; i++) {
-            check((int)i);
+            check(i);
         }
     }
 
@@ -71,27 +71,27 @@ class generator_allDefault extends Thread implements Runnable {
         "NS4",  "NT1",  "NT2",  "NT3",  "NT4",  "NT5",   "NT6",  "NT7",  "NT8",  "NT9",
         "NT10", "NT11", "NT12", "NZ1",  "NZ2",  "NZ3",   "NZ4",  "NZ5",  "NZ6"
     };
-    private markerGroup[] BACKUP_MARKERS = {
-        new markerGroup(() -> true, new ArrayList<String>(Arrays.asList(
+    private MarkerGroup[] BACKUP_MARKERS = {
+        new MarkerGroup(() -> true, new ArrayList<String>(Arrays.asList(
             "A1-Peephole", "A1-PaSL", "A1-Outnumbered", "A1-ASooR",
             "A1-OtToU", "A1-Trio", "A1-Beaten Path", "A1-Star"
         ))),
-        new markerGroup(() -> !locked.containsKey("F1") && (!locked.containsKey("Connector") || !locked.containsKey("F3")), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("F1") && (!locked.containsKey("Connector") || !locked.containsKey("F3")), new ArrayList<String>(Arrays.asList(
             "F0-Star"
         ))),
-        new markerGroup(() -> !locked.containsKey("F3"), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("F3"), new ArrayList<String>(Arrays.asList(
             "F3-Star"
         ))),
-        new markerGroup(() -> true, new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> true, new ArrayList<String>(Arrays.asList(
             "A2-Hall of Windows", "A2-Guards", "A2-Suicide Mission", "A2-Star",
             "A3-ABTU Star", "A3-ABTU", "A3-AEP", "A3-Swallowed the Key",
             "A3-Stashed for Later", "A3-Clock Star",
             "A4-Push it Further", "A4-Branch it Out", "A4-Above All That", "A4-Star"
         ))),
-        new markerGroup(() -> !locked.containsKey("Connector"), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("Connector"), new ArrayList<String>(Arrays.asList(
             "A4-DCtS"
         ))),
-        new markerGroup(() -> true, new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> true, new ArrayList<String>(Arrays.asList(
             "A5-Two Boxes", "A5-Two Boxes Star", "A5-Over the Fence", "A5-YKYMCTS",
             "A5-OLB", "A5-FC", "A5-FC Star",
             "A6-Mobile Mindfield", "A6-Deception", "A6-Door too Far", "A6-Bichromatic",
@@ -99,10 +99,10 @@ class generator_allDefault extends Thread implements Runnable {
             "A7-Two Buzzers", "A7-Pinhole", "A7-LFI", "A7-WiaL",
             "A7-Trapped Inside", "A7-Star"
         ))),
-        new markerGroup(() -> !(locked.containsKey("A Star") || locked.containsKey("B Star") || locked.containsKey("C Star")), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !(locked.containsKey("A Star") || locked.containsKey("B Star") || locked.containsKey("C Star")), new ArrayList<String>(Arrays.asList(
             "A*-DDM", "A*-Nervewrecker", "A*-JfW"
         ))),
-        new markerGroup(() -> !locked.containsKey("B Gate"), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("B Gate"), new ArrayList<String>(Arrays.asList(
             "B1-SaaS", "B1-WtaD", "B1-Third Wheel", "B1-Over the Fence",
             "B1-RoD", "B1-Star",
             "B2-Higher Ground", "B2-Tomb", "B2-MotM", "B2-Moonshot",
@@ -112,34 +112,34 @@ class generator_allDefault extends Thread implements Runnable {
             "B4-TRA", "B4-ABUH", "B4-Double-Plate", "B4-Self Help",
             "B4-RPS", "B4-WAtC", "B4-TRA Star"
         ))),
-        new markerGroup(() -> !locked.containsKey("B Gate") && !locked.containsKey("Connector"), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("B Gate") && !locked.containsKey("Connector"), new ArrayList<String>(Arrays.asList(
             "B4-Sphinx Star"
         ))),
-        new markerGroup(() -> !locked.containsKey("B Gate"), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("B Gate"), new ArrayList<String>(Arrays.asList(
             "B5-Plates", "B5-Two Jammers", "B5-Iron Curtain", "B5-SES",
             "B5-Chambers"
         ))),
-        new markerGroup(() -> !locked.containsKey("B Gate") && ((!locked.containsKey("Connector") && !locked.containsKey("Fan")) || !locked.containsKey("Cube")), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("B Gate") && ((!locked.containsKey("Connector") && !locked.containsKey("Fan")) || !locked.containsKey("Cube")), new ArrayList<String>(Arrays.asList(
             "B5-Obelisk Star"
         ))),
-        new markerGroup(() -> !locked.containsKey("B Gate"), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("B Gate"), new ArrayList<String>(Arrays.asList(
             "B6-Egyptian Arcade", "B6-JDaW", "B6-Crisscross",
             "B7-WLJ", "B7-AFaF", "B7-BSbS Star", "B7-BSbS",
             "B7-BLoM"
         ))),
-        new markerGroup(() -> !locked.containsKey("B Gate") && !locked.containsKey("Fan"), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("B Gate") && !locked.containsKey("Fan"), new ArrayList<String>(Arrays.asList(
             "B7-Star"
         ))),
-        new markerGroup(() -> !(locked.containsKey("A Star") || locked.containsKey("B Star") || locked.containsKey("C Star")), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !(locked.containsKey("A Star") || locked.containsKey("B Star") || locked.containsKey("C Star")), new ArrayList<String>(Arrays.asList(
             "B*-Merry Go Round", "B*-Cat's Cradle", "B*-Peekaboo"
         ))),
-        new markerGroup(() -> !locked.containsKey("C Gate"), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("C Gate"), new ArrayList<String>(Arrays.asList(
             "C1-Labyrinth", "C1-Conservatory", "C1-Blowback", "C1-Star"
         ))),
-        new markerGroup(() -> !locked.containsKey("C Gate") && !locked.containsKey("Cube"), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("C Gate") && !locked.containsKey("Cube"), new ArrayList<String>(Arrays.asList(
             "C1-MIA"
         ))),
-        new markerGroup(() -> !locked.containsKey("C Gate"), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("C Gate"), new ArrayList<String>(Arrays.asList(
             "C2-Cemetery", "C2-ADaaF", "C2-Rapunzel", "C2-Short Wall",
             "C2-Star",
             "C3-Three Connectors", "C3-BSLS", "C3-Jammer Quarantine", "C3-Weathertop",
@@ -147,28 +147,28 @@ class generator_allDefault extends Thread implements Runnable {
             "C4-Stables", "C4-Armory", "C4-Oubliette Star", "C4-Oubliette",
             "C4-Throne Room Star"
         ))),
-        new markerGroup(() -> !locked.containsKey("C Gate") && !locked.containsKey("Cube"), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("C Gate") && !locked.containsKey("Cube"), new ArrayList<String>(Arrays.asList(
             "C4-Throne Room"
         ))),
-        new markerGroup(() -> !locked.containsKey("C Gate"), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("C Gate"), new ArrayList<String>(Arrays.asList(
             "C5-Time Crawls", "C5-Dumbwaiter", "C5-Time Flies", "C5-UCaJ",
             "C5-Time Flies Star"
         ))),
-        new markerGroup(() -> !locked.containsKey("C Gate") && !locked.containsKey("Cube"), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("C Gate") && !locked.containsKey("Cube"), new ArrayList<String>(Arrays.asList(
             "C5-UCAJ Star", "C5-Dumbwaiter Star"
         ))),
-        new markerGroup(() -> !locked.containsKey("C Gate"), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("C Gate"), new ArrayList<String>(Arrays.asList(
             "C6-Two Way Street", "C6-Circumlocution", "C6-Seven Doors", "C6-Star",
             "C7-Prison Break", "C7-Carrier Pigeons", "C7-Crisscross", "C7-DMS",
             "C7-Star"
         ))),
-        new markerGroup(() -> !(locked.containsKey("A Star") || locked.containsKey("B Star") || locked.containsKey("C Star")), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !(locked.containsKey("A Star") || locked.containsKey("B Star") || locked.containsKey("C Star")), new ArrayList<String>(Arrays.asList(
             "C*-Nexus"
         ))),
-        new markerGroup(() -> !(locked.containsKey("A Star") || locked.containsKey("B Star") || locked.containsKey("C Star")) && (!locked.containsKey("Connector") || !locked.containsKey("Cube")), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !(locked.containsKey("A Star") || locked.containsKey("B Star") || locked.containsKey("C Star")) && (!locked.containsKey("Connector") || !locked.containsKey("Cube")), new ArrayList<String>(Arrays.asList(
             "C*-Cobweb", "C*-Unreachable Garden"
         ))),
-        new markerGroup(() -> !locked.containsKey("C Gate"), new ArrayList<String>(Arrays.asList(
+        new MarkerGroup(() -> !locked.containsKey("C Gate"), new ArrayList<String>(Arrays.asList(
             "CM-Star"
         )))
     };
@@ -198,24 +198,25 @@ class generator_allDefault extends Thread implements Runnable {
         }
     }
 
-    public boolean check(int seed) {
-        talosProgress progress = new talosProgress();
-        progress.SetVar("Randomizer_Seed", seed);
-        rand r = new rand(seed);
+    private TalosProgress empty;
+    public TalosProgress generate(long seed) {
+        TalosProgress progress = new TalosProgress();
+        progress.setVar("Randomizer_Seed", (int)seed);
+        Rand r = new Rand(seed);
 
         locked = new HashMap<String, String[]>(BACKUP_LOCKED);
-        markerGroup[] markers = new markerGroup[BACKUP_MARKERS.length];
+        MarkerGroup[] markers = new MarkerGroup[BACKUP_MARKERS.length];
         for (int i = 0; i < BACKUP_MARKERS.length; i++) {
             markers[i] = BACKUP_MARKERS[i].clone();
         }
 
-        progress.SetVar("PaintItemSeed", r.next(0, 8909478));
-        progress.SetVar("Code_Floor4", r.next(1, 999));
-        progress.SetVar("Code_Floor5", r.next(1, 999));
-        progress.SetVar("Code_Floor6", r.next(4, 9)*100 + r.next(4, 9)*10 + r.next(4, 9));
+        progress.setVar("PaintItemSeed", r.next(0, 8909478));
+        progress.setVar("Code_Floor4", r.next(1, 999));
+        progress.setVar("Code_Floor5", r.next(1, 999));
+        progress.setVar("Code_Floor6", r.next(4, 9)*100 + r.next(4, 9)*10 + r.next(4, 9));
 
         for (int i = 0; i < PORTAL_ORDER.length; i++) {
-            progress.SetVar(PORTAL_ORDER[i], i + 1);
+            progress.setVar(PORTAL_ORDER[i], i + 1);
         }
 
         boolean checkGates = true;
@@ -223,7 +224,7 @@ class generator_allDefault extends Thread implements Runnable {
         int availableMarkers = 0;
         String arranger = new String();
         ArrayList<String> accessableArrangers = new ArrayList<String>();
-        ArrayList<markerGroup> openMarkers = new ArrayList<markerGroup>();
+        ArrayList<MarkerGroup> openMarkers = new ArrayList<MarkerGroup>();
         ArrayList<Integer> closedMarkers = new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5, 6));
 
         while (!(arrangerStage > 4) || accessableArrangers.size() > 0) {
@@ -302,7 +303,7 @@ class generator_allDefault extends Thread implements Runnable {
                         closedMarkers.addAll(Arrays.asList(14, 15, 16, 17, 18, 19, 20, 21, 22, 23));
                     }
 
-                    ArrayList<markerGroup> tempOpenMarkers = new ArrayList<markerGroup>();
+                    ArrayList<MarkerGroup> tempOpenMarkers = new ArrayList<MarkerGroup>();
                     int tempAvailableMarkers = 0;
                     for (int index : closedMarkers) {
                         if (markers[index].isOpen()) {
@@ -313,12 +314,12 @@ class generator_allDefault extends Thread implements Runnable {
 
                     for (String sigil : uniqueSigils) {
                         int index = r.next(0, tempAvailableMarkers - 1);
-                        for (markerGroup group : tempOpenMarkers) {
+                        for (MarkerGroup group : tempOpenMarkers) {
                             if (index >= group.getSize()) {
                                 index -= group.getSize();
                             } else {
                                 String randMarker = group.getMarkers().remove(index);
-                                progress.SetVar(randMarker, TETRO_INDEXES.get(sigil));
+                                progress.setVar(randMarker, TETRO_INDEXES.get(sigil));
                                 tempAvailableMarkers -= 1;
                                 break;
                             }
@@ -336,15 +337,15 @@ class generator_allDefault extends Thread implements Runnable {
 
             for (String sigil : sigils) {
                 int index = r.next(0, availableMarkers - 1);
-                for (markerGroup group : openMarkers) {
+                for (MarkerGroup group : openMarkers) {
                     if (index >= group.getSize()) {
                         index -= group.getSize();
                     } else {
                         String randMarker = group.getMarkers().remove(index);
                         if (sigil.charAt(0) == 'E' && (randMarker.charAt(0) != 'A' || randMarker.charAt(1) == '*')) {
-                            return false;
+                            return empty;
                         }
-                        progress.SetVar(randMarker, TETRO_INDEXES.get(sigil));
+                        progress.setVar(randMarker, TETRO_INDEXES.get(sigil));
                         availableMarkers -= 1;
                         if (group.getSize() < 1) {
                             openMarkers.remove(group);
@@ -354,18 +355,25 @@ class generator_allDefault extends Thread implements Runnable {
                 }
             }
         }
+        return progress;
+    }
 
-        int l_count = 0;
-        int z_count = 0;
+    public boolean check(long seed) {
+        TalosProgress progress = generate(seed);
+        if (progress == null) {
+            return false;
+        }
+        int lCount = 0;
+        int zCount = 0;
         for (String marker : A_MARKERS) {
             String sigil = TETROS[progress.getVar(marker) - 1];
             if (sigil.startsWith("NL")) {
-                l_count++;
+                lCount++;
             } else if (sigil.startsWith("NZ")) {
-                z_count++;
+                zCount++;
             }
         }
-        if (l_count >= 2 && z_count >= 2) {
+        if (lCount >= 2 && zCount >= 2) {
             String output = String.format("%d, %s, %d", seed, progress.getChecksum(), progress.getVar("Code_Floor6"));
             System.out.println(output);
             try {
@@ -373,7 +381,6 @@ class generator_allDefault extends Thread implements Runnable {
             } catch (Exception e) {}
             return true;
         }
-
         return false;
     }
 }

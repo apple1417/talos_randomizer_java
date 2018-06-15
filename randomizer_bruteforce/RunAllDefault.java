@@ -1,4 +1,4 @@
-class run_allDefault {
+class RunAllDefault {
     private static int THREAD_NUM = 8;
     private static long PER_LOOP = 10000;
     private static long PER_THREAD = (PER_LOOP / THREAD_NUM);
@@ -18,17 +18,17 @@ class run_allDefault {
         } catch (ArrayIndexOutOfBoundsException|NumberFormatException e){}
 
         while (current_seed + PER_LOOP < max_seed) {
-            generator_allDefault[] threads = new generator_allDefault[THREAD_NUM];
+            GeneratorAllDefault[] threads = new GeneratorAllDefault[THREAD_NUM];
             for (int i = 0; i < THREAD_NUM; i++) {
-                threads[i] = new generator_allDefault(Integer.toString(i));
+                threads[i] = new GeneratorAllDefault(Integer.toString(i));
                 threads[i].start(current_seed, current_seed + PER_THREAD - 1);
                 current_seed += PER_THREAD;
             }
-            for (generator_allDefault thread : threads) {
+            for (GeneratorAllDefault thread : threads) {
                 thread.waitFinished();
             }
         }
-        generator_allDefault thread = new generator_allDefault("0");
+        GeneratorAllDefault thread = new GeneratorAllDefault("0");
         thread.start(current_seed, 0x7FFFFFFF);
         System.out.println("Out of Seeds");
     }
