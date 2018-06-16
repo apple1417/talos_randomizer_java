@@ -33,7 +33,23 @@ class TalosProgress {
         }
     }
 
-    private static final String[] CHECKSUM_MARKERS = {
+    public static String[] TETROS = {
+        "**1",  "**2",  "**3",  "**4",  "**5",  "**6",   "**7",  "**8",  "**9",  "**10",
+        "**11", "**12", "**13", "**14", "**15", "**16",  "**17", "**18", "**19", "**20",
+        "**21", "**22", "**23", "**24", "**25", "**26",  "**27", "**28", "**29", "**30",
+        "DI1",  "DI2",  "DJ1",  "DJ2",  "DJ3",  "DJ4",   "DJ5",  "DL1",  "DL2",  "DL3",
+        "DT1",  "DT2",  "DT3",  "DT4",  "DZ1",  "DZ2",   "DZ3",  "DZ4",  "EL1",  "EL2",
+        "EL3",  "EL4",  "EO1",  "ES1",  "ES2",  "ES3",   "ES4",  "MI1",  "MJ1",  "ML1",
+        "ML2",  "ML3",  "ML4",  "MO1",  "MS1",  "MS2",   "MT1",  "MT2",  "MT3",  "MT4",
+        "MT5",  "MT6",  "MT7",  "MT8",  "MT9",  "MT10",  "MZ1",  "MZ2",  "MZ3",  "MZ4",
+        "NI1",  "NI2",  "NI3",  "NI4",  "NI5",  "NI6",   "NJ1",  "NJ2",  "NJ3",  "NJ4",
+        "NL1",  "NL2",  "NL3",  "NL4",  "NL5",  "NL6",   "NL7",  "NL8",  "NL9",  "NL10",
+        "NO1",  "NO2",  "NO3",  "NO4",  "NO5",  "NO6",   "NO7",  "NS1",  "NS2",  "NS3",
+        "NS4",  "NT1",  "NT2",  "NT3",  "NT4",  "NT5",   "NT6",  "NT7",  "NT8",  "NT9",
+        "NT10", "NT11", "NT12", "NZ1",  "NZ2",  "NZ3",   "NZ4",  "NZ5",  "NZ6"
+    };
+
+    private static String[] CHECKSUM_MARKERS = {
         "A1-Peephole", "A2-Hall of Windows", "A1-PaSL", "A1-Outnumbered",
         "A1-ASooR", "A2-Guards", "A1-OtToU", "A1-Trio",
         "A2-Suicide Mission", "A3-ABTU Star", "A3-ABTU", "A3-AEP",

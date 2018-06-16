@@ -39,6 +39,7 @@ class GeneratorAllDefault extends Thread implements Runnable {
         }
     }
 
+    private static HashMap<String, Integer> TETRO_INDEXES = new HashMap<String, Integer>();
     private static HashMap<String, String[]> BACKUP_LOCKED = new HashMap<String, String[]>();
     private HashMap<String, String[]> locked = new HashMap<String, String[]>(BACKUP_LOCKED);
     private static String[] PORTAL_ORDER = new String[] {
@@ -55,22 +56,7 @@ class GeneratorAllDefault extends Thread implements Runnable {
         "A6-Mobile Mindfield", "A6-Deception", "A6-Door too Far", "A6-Bichromatic", "A6-Star",
         "A7-LFI", "A7-Trapped Inside", "A7-Two Buzzers", "A7-Star", "A7-WiaL", "A7-Pinhole"
     };
-    private static HashMap<String, Integer> TETRO_INDEXES = new HashMap<String, Integer>();
-    private static String[] TETROS = {
-        "**1",  "**2",  "**3",  "**4",  "**5",  "**6",   "**7",  "**8",  "**9",  "**10",
-        "**11", "**12", "**13", "**14", "**15", "**16",  "**17", "**18", "**19", "**20",
-        "**21", "**22", "**23", "**24", "**25", "**26",  "**27", "**28", "**29", "**30",
-        "DI1",  "DI2",  "DJ1",  "DJ2",  "DJ3",  "DJ4",   "DJ5",  "DL1",  "DL2",  "DL3",
-        "DT1",  "DT2",  "DT3",  "DT4",  "DZ1",  "DZ2",   "DZ3",  "DZ4",  "EL1",  "EL2",
-        "EL3",  "EL4",  "EO1",  "ES1",  "ES2",  "ES3",   "ES4",  "MI1",  "MJ1",  "ML1",
-        "ML2",  "ML3",  "ML4",  "MO1",  "MS1",  "MS2",   "MT1",  "MT2",  "MT3",  "MT4",
-        "MT5",  "MT6",  "MT7",  "MT8",  "MT9",  "MT10",  "MZ1",  "MZ2",  "MZ3",  "MZ4",
-        "NI1",  "NI2",  "NI3",  "NI4",  "NI5",  "NI6",   "NJ1",  "NJ2",  "NJ3",  "NJ4",
-        "NL1",  "NL2",  "NL3",  "NL4",  "NL5",  "NL6",   "NL7",  "NL8",  "NL9",  "NL10",
-        "NO1",  "NO2",  "NO3",  "NO4",  "NO5",  "NO6",   "NO7",  "NS1",  "NS2",  "NS3",
-        "NS4",  "NT1",  "NT2",  "NT3",  "NT4",  "NT5",   "NT6",  "NT7",  "NT8",  "NT9",
-        "NT10", "NT11", "NT12", "NZ1",  "NZ2",  "NZ3",   "NZ4",  "NZ5",  "NZ6"
-    };
+
     private MarkerGroup[] BACKUP_MARKERS = {
         new MarkerGroup(() -> true, new ArrayList<String>(Arrays.asList(
             "A1-Peephole", "A1-PaSL", "A1-Outnumbered", "A1-ASooR",
@@ -193,8 +179,8 @@ class GeneratorAllDefault extends Thread implements Runnable {
         BACKUP_LOCKED.put("F5", new String[] {"NI5", "NI6", "NJ4", "NL10", "NO4", "NO5", "NO6", "NO7", "NS4", "NT9", "NT10", "NT11", "NT12", "NZ6"});
         BACKUP_LOCKED.put("F6", new String[] {"EL1", "EL2", "EL3", "EL4", "EO1", "ES1", "ES2", "ES3", "ES4"});
         locked = new HashMap<String, String[]>(BACKUP_LOCKED);
-        for (int i = 0; i < TETROS.length; i++) {
-            TETRO_INDEXES.put(TETROS[i], i + 1);
+        for (int i = 0; i < TalosProgress.TETROS.length; i++) {
+            TETRO_INDEXES.put(TalosProgress.TETROS[i], i + 1);
         }
     }
 
@@ -366,7 +352,7 @@ class GeneratorAllDefault extends Thread implements Runnable {
         int lCount = 0;
         int zCount = 0;
         for (String marker : A_MARKERS) {
-            String sigil = TETROS[progress.getVar(marker) - 1];
+            String sigil = TalosProgress.TETROS[progress.getVar(marker) - 1];
             if (sigil.startsWith("NL")) {
                 lCount++;
             } else if (sigil.startsWith("NZ")) {
