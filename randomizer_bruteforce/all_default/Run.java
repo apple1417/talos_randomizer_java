@@ -1,4 +1,8 @@
-class RunAllDefault {
+package randomizer_bruteforce.all_default;
+
+import randomizer_bruteforce.*;
+
+class Run {
     private static int THREAD_NUM = 8;
     private static long PER_LOOP = 10000;
     private static long PER_THREAD = (PER_LOOP / THREAD_NUM);
@@ -18,17 +22,17 @@ class RunAllDefault {
         } catch (ArrayIndexOutOfBoundsException|NumberFormatException e){}
 
         while (current_seed + PER_LOOP < max_seed) {
-            GeneratorAllDefault[] threads = new GeneratorAllDefault[THREAD_NUM];
+            Generator[] threads = new Generator[THREAD_NUM];
             for (int i = 0; i < THREAD_NUM; i++) {
-                threads[i] = new GeneratorAllDefault(Integer.toString(i));
+                threads[i] = new Generator(Integer.toString(i));
                 threads[i].start(current_seed, current_seed + PER_THREAD - 1);
                 current_seed += PER_THREAD;
             }
-            for (GeneratorAllDefault thread : threads) {
+            for (Generator thread : threads) {
                 thread.waitFinished();
             }
         }
-        GeneratorAllDefault thread = new GeneratorAllDefault("0");
+        Generator thread = new Generator("0");
         thread.start(current_seed, 0x7FFFFFFF);
         System.out.println("Out of Seeds");
     }

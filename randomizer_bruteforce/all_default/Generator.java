@@ -1,15 +1,18 @@
+package randomizer_bruteforce.all_default;
+
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import randomizer_bruteforce.*;
 
-class GeneratorAllDefault extends Thread implements Runnable {
+class Generator extends Thread implements Runnable {
     private Thread t;
     private String threadName;
     private long min;
     private long max;
 
-    GeneratorAllDefault(String name) {
+    Generator(String name) {
         threadName = name;
     }
 

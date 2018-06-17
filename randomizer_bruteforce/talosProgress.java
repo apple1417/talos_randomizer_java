@@ -1,7 +1,9 @@
+package randomizer_bruteforce;
+
 import java.util.HashMap;
 import java.util.Iterator;
 
-class TalosProgress {
+public class TalosProgress {
     private HashMap<String, Integer> data;
 
     public TalosProgress(HashMap<String, Integer> options) {

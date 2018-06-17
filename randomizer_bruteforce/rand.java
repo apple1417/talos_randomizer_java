@@ -1,4 +1,6 @@
-class Rand {
+package randomizer_bruteforce;
+
+public class Rand {
     private long seed;
 
     public Rand(long seed) {

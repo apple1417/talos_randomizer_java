@@ -1,3 +1,5 @@
+package randomizer_bruteforce;
+
 import java.util.ArrayList;
 import java.util.function.Supplier;
 

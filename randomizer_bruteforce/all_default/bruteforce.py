@@ -1,5 +1,6 @@
 """
     This is very specialized, I cut a lot of code for other options/modes
+    Don't use this the java one is much quicker
     Future seed, when F3 star is fixed: 178957
 """
 import sys
