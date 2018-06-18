@@ -1,0 +1,168 @@
+Mode: NONE, Scavenger: OFF, Portals: Off, Mobius: Off, Seed: 57540
+18A3EE7F
+Mode: NONE, Scavenger: OFF, Portals: Off, Mobius: All Sigils, Seed: 732786
+3A544ACA
+Mode: NONE, Scavenger: OFF, Portals: On, Mobius: Off, Seed: 829520
+D53CE16A
+Mode: NONE, Scavenger: OFF, Portals: On, Mobius: All Sigils, Seed: 791884
+7A6523C3
+Mode: NONE, Scavenger: SHORT, Portals: Off, Mobius: Off, Seed: 133607
+25544D9C
+Mode: NONE, Scavenger: SHORT, Portals: Off, Mobius: All Sigils, Seed: 2021
+3BF363E9
+Mode: NONE, Scavenger: SHORT, Portals: On, Mobius: Off, Seed: 163045
+E61DD32B
+Mode: NONE, Scavenger: SHORT, Portals: On, Mobius: All Sigils, Seed: 897501
+00C084A0
+Mode: NONE, Scavenger: FULL, Portals: Off, Mobius: Off, Seed: 318293
+73A7B683
+Mode: NONE, Scavenger: FULL, Portals: Off, Mobius: All Sigils, Seed: 318782
+DAB80FB6
+Mode: NONE, Scavenger: FULL, Portals: On, Mobius: Off, Seed: 443468
+C11DC353
+Mode: NONE, Scavenger: FULL, Portals: On, Mobius: All Sigils, Seed: 67481
+6059B2D3
+Mode: DEFAULT, Scavenger: OFF, Portals: Off, Mobius: Off, Seed: 580852
+B93A5D3E
+Mode: DEFAULT, Scavenger: OFF, Portals: Off, Mobius: All Sigils, Seed: 663275
+F357A38F
+Mode: DEFAULT, Scavenger: OFF, Portals: On, Mobius: Off, Seed: 183587
+8543B39D
+Mode: DEFAULT, Scavenger: OFF, Portals: On, Mobius: All Sigils, Seed: 839370
+E1B59297
+Mode: DEFAULT, Scavenger: SHORT, Portals: Off, Mobius: Off, Seed: 976028
+CF252F4B
+Mode: DEFAULT, Scavenger: SHORT, Portals: Off, Mobius: All Sigils, Seed: 355718
+D11F5FA3
+Mode: DEFAULT, Scavenger: SHORT, Portals: On, Mobius: Off, Seed: 18991
+441A6D88
+Mode: DEFAULT, Scavenger: SHORT, Portals: On, Mobius: All Sigils, Seed: 858677
+899C1A5C
+Mode: DEFAULT, Scavenger: FULL, Portals: Off, Mobius: Off, Seed: 56967
+E5BEF84A
+Mode: DEFAULT, Scavenger: FULL, Portals: Off, Mobius: All Sigils, Seed: 580639
+15BC736C
+Mode: DEFAULT, Scavenger: FULL, Portals: On, Mobius: Off, Seed: 890716
+A53B1675
+Mode: DEFAULT, Scavenger: FULL, Portals: On, Mobius: All Sigils, Seed: 505078
+2185844F
+Mode: SIXTY, Scavenger: OFF, Portals: Off, Mobius: Off, Seed: 537124
+45FB9653
+Mode: SIXTY, Scavenger: OFF, Portals: Off, Mobius: All Sigils, Seed: 488673
+4768E214
+Mode: SIXTY, Scavenger: OFF, Portals: On, Mobius: Off, Seed: 620258
+AAE8C632
+Mode: SIXTY, Scavenger: OFF, Portals: On, Mobius: All Sigils, Seed: 634485
+D3071A59
+Mode: SIXTY, Scavenger: SHORT, Portals: Off, Mobius: Off, Seed: 399114
+D45B595B
+Mode: SIXTY, Scavenger: SHORT, Portals: Off, Mobius: All Sigils, Seed: 169955
+696A9206
+Mode: SIXTY, Scavenger: SHORT, Portals: On, Mobius: Off, Seed: 889220
+7B09016B
+Mode: SIXTY, Scavenger: SHORT, Portals: On, Mobius: All Sigils, Seed: 365063
+59C1B33F
+Mode: SIXTY, Scavenger: FULL, Portals: Off, Mobius: Off, Seed: 615817
+C3BAD0B0
+Mode: SIXTY, Scavenger: FULL, Portals: Off, Mobius: All Sigils, Seed: 485837
+07B028C6
+Mode: SIXTY, Scavenger: FULL, Portals: On, Mobius: Off, Seed: 765939
+83988578
+Mode: SIXTY, Scavenger: FULL, Portals: On, Mobius: All Sigils, Seed: 753571
+9AAB3C01
+Mode: FULLY_RANDOM, Scavenger: OFF, Portals: Off, Mobius: Off, Seed: 980893
+ECF855A2
+Mode: FULLY_RANDOM, Scavenger: OFF, Portals: Off, Mobius: All Sigils, Seed: 552101
+24496A87
+Mode: FULLY_RANDOM, Scavenger: OFF, Portals: On, Mobius: Off, Seed: 604879
+E5ED7219
+Mode: FULLY_RANDOM, Scavenger: OFF, Portals: On, Mobius: All Sigils, Seed: 568382
+B2B4F724
+Mode: FULLY_RANDOM, Scavenger: SHORT, Portals: Off, Mobius: Off, Seed: 721148
+FF1BC427
+Mode: FULLY_RANDOM, Scavenger: SHORT, Portals: Off, Mobius: All Sigils, Seed: 291125
+FFB07B28
+Mode: FULLY_RANDOM, Scavenger: SHORT, Portals: On, Mobius: Off, Seed: 804941
+E8DCDF02
+Mode: FULLY_RANDOM, Scavenger: SHORT, Portals: On, Mobius: All Sigils, Seed: 529670
+F9140726
+Mode: FULLY_RANDOM, Scavenger: FULL, Portals: Off, Mobius: Off, Seed: 57614
+170928CF
+Mode: FULLY_RANDOM, Scavenger: FULL, Portals: Off, Mobius: All Sigils, Seed: 771163
+1F46DF2C
+Mode: FULLY_RANDOM, Scavenger: FULL, Portals: On, Mobius: Off, Seed: 633011
+F82F2C9B
+Mode: FULLY_RANDOM, Scavenger: FULL, Portals: On, Mobius: All Sigils, Seed: 163320
+EBE81656
+Mode: INTENDED, Scavenger: OFF, Portals: Off, Mobius: Off, Seed: 865277
+578822F6
+Mode: INTENDED, Scavenger: OFF, Portals: Off, Mobius: All Sigils, Seed: 458669
+44A05FE2
+Mode: INTENDED, Scavenger: OFF, Portals: On, Mobius: Off, Seed: 588544
+2661C041
+Mode: INTENDED, Scavenger: OFF, Portals: On, Mobius: All Sigils, Seed: 367583
+E615260F
+Mode: INTENDED, Scavenger: SHORT, Portals: Off, Mobius: Off, Seed: 895906
+E69DDDB5
+Mode: INTENDED, Scavenger: SHORT, Portals: Off, Mobius: All Sigils, Seed: 231238
+E978BE72
+Mode: INTENDED, Scavenger: SHORT, Portals: On, Mobius: Off, Seed: 433962
+3242E6D8
+Mode: INTENDED, Scavenger: SHORT, Portals: On, Mobius: All Sigils, Seed: 447786
+443A12B0
+Mode: INTENDED, Scavenger: FULL, Portals: Off, Mobius: Off, Seed: 599966
+10FFE5FD
+Mode: INTENDED, Scavenger: FULL, Portals: Off, Mobius: All Sigils, Seed: 546162
+C075424F
+Mode: INTENDED, Scavenger: FULL, Portals: On, Mobius: Off, Seed: 15999
+CB6B750B
+Mode: INTENDED, Scavenger: FULL, Portals: On, Mobius: All Sigils, Seed: 173928
+41E63C82
+Mode: HARDMODE, Scavenger: OFF, Portals: Off, Mobius: Off, Seed: 40074
+57C18661
+Mode: HARDMODE, Scavenger: OFF, Portals: Off, Mobius: All Sigils, Seed: 177138
+816D11C7
+Mode: HARDMODE, Scavenger: OFF, Portals: On, Mobius: Off, Seed: 319853
+571F19E7
+Mode: HARDMODE, Scavenger: OFF, Portals: On, Mobius: All Sigils, Seed: 19106
+133A8A64
+Mode: HARDMODE, Scavenger: SHORT, Portals: Off, Mobius: Off, Seed: 822982
+DB5ACF60
+Mode: HARDMODE, Scavenger: SHORT, Portals: Off, Mobius: All Sigils, Seed: 472364
+D8C09312
+Mode: HARDMODE, Scavenger: SHORT, Portals: On, Mobius: Off, Seed: 526045
+60AEFD22
+Mode: HARDMODE, Scavenger: SHORT, Portals: On, Mobius: All Sigils, Seed: 567701
+05A05894
+Mode: HARDMODE, Scavenger: FULL, Portals: Off, Mobius: Off, Seed: 143662
+CE3B4049
+Mode: HARDMODE, Scavenger: FULL, Portals: Off, Mobius: All Sigils, Seed: 466802
+36998337
+Mode: HARDMODE, Scavenger: FULL, Portals: On, Mobius: Off, Seed: 253433
+E6C7911B
+Mode: HARDMODE, Scavenger: FULL, Portals: On, Mobius: All Sigils, Seed: 927626
+37C72967
+Mode: SIXTY_HARDMODE, Scavenger: OFF, Portals: Off, Mobius: Off, Seed: 853227
+0029443F
+Mode: SIXTY_HARDMODE, Scavenger: OFF, Portals: Off, Mobius: All Sigils, Seed: 797741
+A7416D0F
+Mode: SIXTY_HARDMODE, Scavenger: OFF, Portals: On, Mobius: Off, Seed: 285071
+4381A389
+Mode: SIXTY_HARDMODE, Scavenger: OFF, Portals: On, Mobius: All Sigils, Seed: 263636
+C8E098F8
+Mode: SIXTY_HARDMODE, Scavenger: SHORT, Portals: Off, Mobius: Off, Seed: 296101
+4053EDE1
+Mode: SIXTY_HARDMODE, Scavenger: SHORT, Portals: Off, Mobius: All Sigils, Seed: 743333
+1B677A17
+Mode: SIXTY_HARDMODE, Scavenger: SHORT, Portals: On, Mobius: Off, Seed: 81741
+DE635B57
+Mode: SIXTY_HARDMODE, Scavenger: SHORT, Portals: On, Mobius: All Sigils, Seed: 535270
+802C74DC
+Mode: SIXTY_HARDMODE, Scavenger: FULL, Portals: Off, Mobius: Off, Seed: 899094
+7AAB6FAD
+Mode: SIXTY_HARDMODE, Scavenger: FULL, Portals: Off, Mobius: All Sigils, Seed: 793200
+39A3F7FD
+Mode: SIXTY_HARDMODE, Scavenger: FULL, Portals: On, Mobius: Off, Seed: 964332
+53389704
+Mode: SIXTY_HARDMODE, Scavenger: FULL, Portals: On, Mobius: All Sigils, Seed: 364366
+332F2D27
