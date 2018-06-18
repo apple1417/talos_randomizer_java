@@ -1,9 +1,12 @@
-package randomizer_bruteforce.all_default;
+/*
+  This is just a blatent copy-paste, not really sure there's a better way
+   to do it honestly seeing how I end generation early at a different spot
+  To find the actual worst seeds I just piped it into a text file and
+   sorted through all that output (~ 12Mb)
+*/
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+package randomizer_bruteforce.stars;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,7 +15,7 @@ import randomizer_bruteforce.Rand;
 import randomizer_bruteforce.TalosProgress;
 
 class Generator extends Thread implements Runnable {
-    public static String GEN_TYPE = "All default, one hub F6";
+    public static String GEN_TYPE = "All default, one hub all stars";
     private static HashMap<String, Integer> TETRO_INDEXES = new HashMap<String, Integer>();
     private static HashMap<String, String[]> BACKUP_LOCKED = new HashMap<String, String[]>();
     private HashMap<String, String[]> locked = new HashMap<String, String[]>(BACKUP_LOCKED);
@@ -175,9 +178,16 @@ class Generator extends Thread implements Runnable {
     }
 
     public void run() {
+        int max_count = 0;
+        long max_seed = -1;
         for(long i = min; i <= max; i++) {
-            check(i);
+            int count = check(i);
+            if (count >= max_count) {
+                max_count = count;
+                max_seed = i;
+            }
         }
+        System.out.println(String.format("%d (%d)", max_seed, max_count));
     }
 
     public void waitFinished() {
@@ -247,8 +257,9 @@ class Generator extends Thread implements Runnable {
                 }
                 case 3: {
                     if (!(locked.containsKey("A Star") || locked.containsKey("B Star") || locked.containsKey("C Star"))) {
-                        accessableArrangers.addAll(Arrays.asList("Connector", "Cube", "Fan", "Recorder", "Platform", "F1", "F3"));
-                        arrangerStage++;
+                        /*accessableArrangers.addAll(Arrays.asList("Connector", "Cube", "Fan", "Recorder", "Platform", "F1", "F3"));
+                        arrangerStage++;*/
+                        return progress;
                     }
                     break;
                 }
@@ -330,9 +341,6 @@ class Generator extends Thread implements Runnable {
                         index -= group.getSize();
                     } else {
                         String randMarker = group.getMarkers().remove(index);
-                        if (sigil.charAt(0) == 'E' && (randMarker.charAt(0) != 'A' || randMarker.charAt(1) == '*')) {
-                            return empty;
-                        }
                         progress.setVar(randMarker, TETRO_INDEXES.get(sigil));
                         availableMarkers -= 1;
                         if (group.getSize() < 1) {
@@ -346,29 +354,18 @@ class Generator extends Thread implements Runnable {
         return progress;
     }
 
-    public boolean check(long seed) {
+    public int check(long seed) {
         TalosProgress progress = generate(seed);
-        if (progress == null) {
-            return false;
-        }
-        int lCount = 0;
-        int zCount = 0;
+        int count = 0;
         for (String marker : A_MARKERS) {
-            String sigil = TalosProgress.TETROS[progress.getVar(marker) - 1];
-            if (sigil.startsWith("NL")) {
-                lCount++;
-            } else if (sigil.startsWith("NZ")) {
-                zCount++;
+            int sigilIndex = progress.getVar(marker) - 1;
+            if (sigilIndex != -2) {
+                String sigil = TalosProgress.TETROS[sigilIndex];
+                if (sigil.charAt(0) == '*') {
+                    count++;
+                }
             }
         }
-        if (lCount >= 2 && zCount >= 2) {
-            String output = String.format("%d, %s, %d", seed, progress.getChecksum(), progress.getVar("Code_Floor6"));
-            System.out.println(output);
-            try {
-                Files.write(Paths.get("output.txt"), (output + "\n").getBytes(), StandardOpenOption.APPEND);
-            } catch (IOException e) {}
-            return true;
-        }
-        return false;
+        return count;
     }
 }
