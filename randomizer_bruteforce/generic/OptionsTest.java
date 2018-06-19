@@ -10,13 +10,16 @@ class OptionsTest {
     private static Random rand = new Random();
     public static void main(String[] args) {
         HashMap<String, Integer> options = new HashMap<String, Integer>();
-        for (int mode = 0; mode < 7; mode++) {
+        for (int mode = 0; mode <= 6; mode++) {
             options.put("Randomizer_Mode", mode);
-            for (int scavenger = 0; scavenger < 3; scavenger++) {
+            for (int scavenger = 0; scavenger <= 2; scavenger++) {
                 options.put("Randomizer_Scavenger", scavenger);
-                for (int portals = 0; portals < 2; portals++) {
+                if ((mode == 0 || mode == 3) && scavenger != 0) {
+                    continue;
+                }
+                for (int portals = -1; portals <= 1; portals += 2) {
                     options.put("Randomizer_Portals", portals);
-                    for (int loop = 0; loop < 2; loop ++) {
+                    for (int loop = 0; loop <= 1; loop ++) {
                         options.put("Randomizer_Loop", loop);
                         Generator g = new Generator(options);
                         int seed = rand.nextInt(1000000);

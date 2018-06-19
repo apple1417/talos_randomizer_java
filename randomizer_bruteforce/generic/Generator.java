@@ -300,7 +300,7 @@ class Generator{
                         "B3-Sunshot", "B3-Blown Away", "B3-Star", "B3-Eagle's Nest",
                         "B3-Woosh"
                     )), World.B3),
-                    new MarkerGroup(() -> isWorldOpen(World.B4) && (unlocked(Arranger.CUBE) | unlocked(Arranger.RECORDER)), new ArrayList<String>(Arrays.asList(
+                    new MarkerGroup(() -> isWorldOpen(World.B4) && (unlocked(Arranger.CUBE) || unlocked(Arranger.RECORDER)), new ArrayList<String>(Arrays.asList(
                         "B4-Self Help"
                     )), World.B4),
                     new MarkerGroup(() -> isWorldOpen(World.B4) && unlocked(Arranger.CONNECTOR), new ArrayList<String>(Arrays.asList(
@@ -379,7 +379,7 @@ class Generator{
                     new MarkerGroup(() -> isWorldOpen(World.C4) && (unlocked(Arranger.CUBE) || unlocked(Arranger.FAN)), new ArrayList<String>(Arrays.asList(
                         "C4-Throne Room Star"
                     )), World.C4),
-                    new MarkerGroup(() -> isWorldOpen(World.C4) && ((unlocked(Arranger.CONNECTOR) && unlocked(Arranger.CUBE)) || (unlocked(Arranger.RECORDER) && unlocked(Arranger.FAN))), new ArrayList<String>(Arrays.asList(
+                    new MarkerGroup(() -> isWorldOpen(World.C4) && ((unlocked(Arranger.CONNECTOR) && unlocked(Arranger.CUBE)) || (unlocked(Arranger.RECORDER) && unlocked(Arranger.PLATFORM))), new ArrayList<String>(Arrays.asList(
                         "C4-Oubliette Star"
                     )), World.C4),
                     new MarkerGroup(() -> isWorldOpen(World.C5), new ArrayList<String>(Arrays.asList(
@@ -677,7 +677,7 @@ class Generator{
                         "B4-TRA", "B4-ABUH", "B4-Double-Plate", "B4-Self Help",
                         "B4-RPS", "B4-WAtC", "B4-TRA Star"
                     )), World.B4),
-                    new MarkerGroup(() -> isWorldOpen(World.B4) && unlocked(Arranger.CONNECTOR), new ArrayList<String>(Arrays.asList(
+                    new MarkerGroup(() -> isWorldOpen(World.B4) && (unlocked(Arranger.CONNECTOR) || unlocked(Arranger.CUBE)), new ArrayList<String>(Arrays.asList(
                         "B4-Sphinx Star"
                     )), World.B4),
                     new MarkerGroup(() -> isWorldOpen(World.B5), new ArrayList<String>(Arrays.asList(
@@ -694,7 +694,7 @@ class Generator{
                         "B7-WLJ", "B7-AFaF", "B7-BSbS Star", "B7-BSbS",
                         "B7-BLoM"
                     )), World.B7),
-                    new MarkerGroup(() -> isWorldOpen(World.B7) && unlocked(Arranger.FAN), new ArrayList<String>(Arrays.asList(
+                    new MarkerGroup(() -> isWorldOpen(World.B7) && (unlocked(Arranger.CUBE) || unlocked(Arranger.FAN)), new ArrayList<String>(Arrays.asList(
                         "B7-Star"
                     )), World.B7),
                     new MarkerGroup(() -> isWorldOpen(World.B8), new ArrayList<String>(Arrays.asList(
@@ -894,7 +894,7 @@ class Generator{
         ScavengerEnding scavengerGoal = ScavengerEnding.NONE;
         if (scavenger != ScavengerMode.OFF) {
             int endingIndex;
-            if (scavenger == ScavengerMode.FULL) {
+            if (scavenger != ScavengerMode.FULL) {
                 endingIndex = r.next(0, 2);
             } else {
                 endingIndex = r.next(0, 3);
@@ -910,8 +910,8 @@ class Generator{
         Hub startHub = Hub.A;
         if (loop) {
             if (portals) {
-                for (int index = 1; index < portalOrder.length - 1; index++) {
-                    int otherIndex = r.next(0, index);
+                for (int index = 1; index < portalOrder.length; index++) {
+                    int otherIndex = r.next(0, index - 1);
                     World tmp = portalOrder[index];
                     portalOrder[index] = portalOrder[otherIndex];
                     portalOrder[otherIndex] = tmp;
@@ -920,7 +920,7 @@ class Generator{
                 Collections.rotate(Arrays.asList(portalOrder), 1);
             }
         } else if (portals) {
-            for (int index = portalOrder.length - 1; index > 1; index--) {
+            for (int index = portalOrder.length - 1; index > 0; index--) {
                 int otherIndex = r.next(1, index);
                 World tmp = portalOrder[index];
                 portalOrder[index] = portalOrder[otherIndex];
@@ -1412,10 +1412,12 @@ class Generator{
                 for (MarkerGroup group : markers) {
                     allMarkers.addAll(group.getMarkers());
                 }
-                for (Arranger key: arrangerSigils.keySet()) {
-                    for (String sigil : arrangerSigils.get(key)) {
-                        String marker = allMarkers.remove(0);
-                        progress.setVar(marker, TETRO_INDEXES.get(sigil));
+                for (Arranger key: Arranger.values()) {
+                    if (arrangerSigils.containsKey(key)) {
+                        for (String sigil : arrangerSigils.get(key)) {
+                            String marker = allMarkers.remove(0);
+                            progress.setVar(marker, TETRO_INDEXES.get(sigil));
+                        }
                     }
                 }
             }
