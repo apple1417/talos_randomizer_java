@@ -10,7 +10,7 @@ import randomizer_bruteforce.MarkerGroup;
 import randomizer_bruteforce.Rand;
 import randomizer_bruteforce.TalosProgress;
 
-class Generator{
+public class Generator{
     public static String GEN_TYPE = "Generic";
     public static String GEN_VERSION = "v11.0.1";
     private static HashMap<String, Integer> TETRO_INDEXES = new HashMap<String, Integer>();
@@ -79,7 +79,7 @@ class Generator{
         return starOverride && openWorlds.contains(worldName);
     }
 
-    Generator(HashMap<String, Integer> options) {
+    public Generator(HashMap<String, Integer> options) {
         BACKUP_PROGRESS = new TalosProgress(options);
 
         progress = BACKUP_PROGRESS.clone();
@@ -872,7 +872,7 @@ class Generator{
         }
     }
 
-    Generator() {
+    public Generator() {
         this(new HashMap<String, Integer>());
     }
 
