@@ -12,6 +12,7 @@ import randomizer_bruteforce.TalosProgress;
 
 class Generator{
     public static String GEN_TYPE = "Generic";
+    public static String GEN_VERSION = "v11.0.1";
     private static HashMap<String, Integer> TETRO_INDEXES = new HashMap<String, Integer>();
     private static HashMap<Arranger, ArrayList<String>> BACKUP_ARRANGER_SIGILS = new HashMap<Arranger, ArrayList<String>>();
     private HashMap<Arranger, ArrayList<String>> arrangerSigils = new HashMap<Arranger, ArrayList<String>>(BACKUP_ARRANGER_SIGILS);
@@ -60,11 +61,14 @@ class Generator{
     }
 
     private boolean isWorldOpen(World worldName) {
-        if (worldName == World.A1 || scavenger != ScavengerMode.OFF|| loop) {
+        if (worldName == World.A1) {
             return true;
         }
         if (mode == RandomizerMode.INTENDED && !unlocked(Arranger.A1_GATE)) {
             return false;
+        }
+        if (scavenger != ScavengerMode.OFF || loop) {
+            return true;
         }
 
         boolean starOverride = true;
@@ -235,7 +239,7 @@ class Generator{
                     new MarkerGroup(() -> unlocked(Arranger.F1) && (unlocked(Arranger.CONNECTOR) || unlocked(Arranger.F3)), new ArrayList<String>(Arrays.asList(
                         "F0-Star"
                     ))),
-                    new MarkerGroup(() -> unlocked(Arranger.F3), new ArrayList<String>(Arrays.asList(
+                    new MarkerGroup(() -> unlocked(Arranger.F1) && unlocked(Arranger.F3), new ArrayList<String>(Arrays.asList(
                         "F3-Star"
                     )))
                 };
@@ -272,11 +276,8 @@ class Generator{
                         "A6-Star"
                     )), World.A6),
                     new MarkerGroup(() -> isWorldOpen(World.A7), new ArrayList<String>(Arrays.asList(
-                        "A7-Two Buzzers", "A7-Pinhole", "A7-WiaL", "A7-Trapped Inside",
-                        "A7-Star"
-                    )), World.A7),
-                    new MarkerGroup(() -> isWorldOpen(World.A7) && unlocked(Arranger.CONNECTOR), new ArrayList<String>(Arrays.asList(
-                        "A7-LFI"
+                        "A7-Two Buzzers", "A7-Pinhole", "A7-LFI", "A7-WiaL",
+                        "A7-Trapped Inside", "A7-Star"
                     )), World.A7),
                     new MarkerGroup(() -> isWorldOpen(World.A8), new ArrayList<String>(Arrays.asList(
                         "A*-DDM", "A*-Nervewrecker", "A*-JfW"
@@ -736,7 +737,7 @@ class Generator{
                     new MarkerGroup(() -> unlocked(Arranger.F1) && (unlocked(Arranger.CONNECTOR) || unlocked(Arranger.F3)), new ArrayList<String>(Arrays.asList(
                         "F0-Star"
                     ))),
-                    new MarkerGroup(() -> unlocked(Arranger.F3), new ArrayList<String>(Arrays.asList(
+                    new MarkerGroup(() -> unlocked(Arranger.F1) && unlocked(Arranger.F3), new ArrayList<String>(Arrays.asList(
                         "F3-Star"
                     )))
                 };
@@ -853,7 +854,7 @@ class Generator{
                     new MarkerGroup(() -> isWorldOpen(World.C8), new ArrayList<String>(Arrays.asList(
                         "C*-Nexus", "C*-Unreachable Garden"
                     )), World.C8),
-                    new MarkerGroup(() -> isWorldOpen(World.C8), new ArrayList<String>(Arrays.asList(
+                    new MarkerGroup(() -> isWorldOpen(World.C8) && unlocked(Arranger.CUBE), new ArrayList<String>(Arrays.asList(
                         "C*-Cobweb"
                     )), World.C8),
                     new MarkerGroup(() -> isWorldOpen(World.CMESSENGER), new ArrayList<String>(Arrays.asList(
@@ -862,7 +863,7 @@ class Generator{
                     new MarkerGroup(() -> unlocked(Arranger.F1) && (unlocked(Arranger.CONNECTOR) || unlocked(Arranger.F3)), new ArrayList<String>(Arrays.asList(
                         "F0-Star"
                     ))),
-                    new MarkerGroup(() -> unlocked(Arranger.F3), new ArrayList<String>(Arrays.asList(
+                    new MarkerGroup(() -> unlocked(Arranger.F1) && unlocked(Arranger.F3), new ArrayList<String>(Arrays.asList(
                         "F3-Star"
                     )))
                 };
@@ -1023,7 +1024,7 @@ class Generator{
                 }
             }
 
-            if (mode == RandomizerMode.INTENDED) {
+            if (mode == RandomizerMode.INTENDED && scavenger == ScavengerMode.OFF) {
                 String sigil;
                 String marker = "F3-Star";
                 int sigilIndex = r.next(0, 38);
@@ -1032,7 +1033,7 @@ class Generator{
                 } else {
                     sigil = arrangerSigils.get(Arranger.A_STAR).remove(0);
                 }
-                progress.setVar(marker, 1);
+                progress.setVar(marker, TETRO_INDEXES.get(sigil));
                 arrangerSigils.put(Arranger.A1_GATE, new ArrayList<String>(Arrays.asList("DJ1", "DJ2", "DZ1")));
             }
 
@@ -1075,37 +1076,6 @@ class Generator{
                                     accessableArrangers.addAll(Arrays.asList(Arranger.F1, Arranger.F6));
                                     break;
                                 }
-                            }
-                        }
-                    } else if (loop) {
-                        switch (arrangerStage) {
-                            case 0: {
-                                accessableArrangers.add(Arranger.A1_GATE);
-                                arrangerStage++;
-                                break;
-                            }
-                            case 1: {
-                                accessableArrangers.addAll(Arrays.asList(Arranger.CONNECTOR, Arranger.CUBE, Arranger.FAN, Arranger.RECORDER, Arranger.PLATFORM));
-                                arrangerStage++;
-                                break;
-                            }
-                            case 2: {
-                                if (accessableArrangers.size() == 0) {
-                                    accessableArrangers.add(Arranger.F1);
-                                    arrangerStage++;
-                                }
-                                break;
-                            }
-                            case 3: {
-                                if (accessableArrangers.size() == 0) {
-                                    accessableArrangers.addAll(Arrays.asList(
-                                        Arranger.A_GATE, Arranger.B_GATE, Arranger.C_GATE,
-                                        Arranger.A_STAR, Arranger.B_STAR, Arranger.C_STAR,
-                                        Arranger.F2, Arranger.F3, Arranger.F4, Arranger.F5, Arranger.F6
-                                    ));
-                                    arrangerStage = -1;
-                                }
-                                break;
                             }
                         }
                     } else if (mode == RandomizerMode.INTENDED) {
@@ -1191,27 +1161,28 @@ class Generator{
                             }
                             case 2: {
                                 if (accessableArrangers.size() == 0) {
-                                    accessableArrangers.addAll(Arrays.asList(Arranger.A_STAR, Arranger.B_STAR, Arranger.C_STAR));
+                                    accessableArrangers.addAll(Arrays.asList(Arranger.CONNECTOR, Arranger.CUBE, Arranger.FAN, Arranger.RECORDER, Arranger.PLATFORM));
                                     arrangerStage++;
                                 }
                                 break;
                             }
                             case 3: {
                                 if (accessableArrangers.size() == 0) {
-                                    accessableArrangers.addAll(Arrays.asList(Arranger.CONNECTOR, Arranger.CUBE, Arranger.FAN, Arranger.RECORDER, Arranger.PLATFORM, Arranger.F1, Arranger.F3));
-                                    if (mode == RandomizerMode.SIXTY || mode == RandomizerMode.SIXTY_HARDMODE) {
-                                        accessableArrangers.add(Arranger.F2);
-                                    }
+                                    accessableArrangers.addAll(Arrays.asList(Arranger.A_STAR, Arranger.B_STAR, Arranger.C_STAR));
                                     arrangerStage++;
                                 }
                                 break;
                             }
                             case 4: {
+                                if (accessableArrangers.size() == 0) {
+                                    accessableArrangers.addAll(Arrays.asList(Arranger.F1, Arranger.F2, Arranger.F3));
+                                    arrangerStage++;
+                                }
+                                break;
+                            }
+                            case 5: {
                                 if (closedMarkerIndexes.size() == 0) {
                                     accessableArrangers.addAll(Arrays.asList(Arranger.F4, Arranger.F5, Arranger.F6, Arranger.A1_GATE));
-                                    if (mode != RandomizerMode.SIXTY && mode != RandomizerMode.SIXTY_HARDMODE) {
-                                        accessableArrangers.add(Arranger.F2);
-                                    }
                                     arrangerStage = -1;
                                 }
                                 break;
@@ -1405,12 +1376,12 @@ class Generator{
             }
 
             if (scavenger != ScavengerMode.OFF) {
-                if (mode != RandomizerMode.INTENDED) {
-                    arrangerSigils.put(Arranger.A1_GATE, new ArrayList<String>(Arrays.asList("DJ1", "DJ2", "DZ1")));
-                }
                 ArrayList<String> allMarkers = new ArrayList<String>();
                 for (MarkerGroup group : markers) {
                     allMarkers.addAll(group.getMarkers());
+                }
+                if (mode == RandomizerMode.INTENDED) {
+                    allMarkers.add("F3-Star");
                 }
                 for (Arranger key: Arranger.values()) {
                     if (arrangerSigils.containsKey(key)) {

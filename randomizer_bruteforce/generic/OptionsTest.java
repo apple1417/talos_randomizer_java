@@ -14,9 +14,6 @@ class OptionsTest {
             options.put("Randomizer_Mode", mode);
             for (int scavenger = 0; scavenger <= 2; scavenger++) {
                 options.put("Randomizer_Scavenger", scavenger);
-                if ((mode == 0 || mode == 3) && scavenger != 0) {
-                    continue;
-                }
                 for (int portals = -1; portals <= 1; portals += 2) {
                     options.put("Randomizer_Portals", portals);
                     for (int loop = 0; loop <= 1; loop ++) {

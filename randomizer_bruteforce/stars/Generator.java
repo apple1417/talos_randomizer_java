@@ -3,6 +3,8 @@
    to do it honestly seeing how I end generation early at a different spot
   To find the actual worst seeds I just piped it into a text file and
    sorted through all that output (~ 12Mb)
+  Not going to update this, using the generic one will give good enough
+   results, this isn't actually useful I was just curious
 */
 
 package randomizer_bruteforce.stars;
@@ -16,6 +18,7 @@ import randomizer_bruteforce.TalosProgress;
 
 class Generator extends Thread implements Runnable {
     public static String GEN_TYPE = "All default, one hub all stars";
+    public static String GEN_VERSION = "v10.2.3";
     private static HashMap<String, Integer> TETRO_INDEXES = new HashMap<String, Integer>();
     private static HashMap<String, String[]> BACKUP_LOCKED = new HashMap<String, String[]>();
     private HashMap<String, String[]> locked = new HashMap<String, String[]>(BACKUP_LOCKED);

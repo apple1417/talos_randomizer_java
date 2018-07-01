@@ -144,7 +144,7 @@ def check_seed(base_seed):
         (lambda: not locked["F1"] and (not locked["Connector"] or not locked["F3"]), [
             "F0-Star"
         ]),
-        (lambda: not locked["F3"], [
+        (lambda: not locked["F1"] and not locked["F3"], [
             "F3-Star"
         ]),
         (lambda: True, [
@@ -254,9 +254,7 @@ def check_seed(base_seed):
         talosProgress[name] = index + 1
 
     checkGates = True
-    allSpots = False
-    placedItems = False
-    placedStars = False
+    arrangerStage = 0
     availableMarkers = 0
     openMarkers = []
     closedMarkers = []
@@ -279,9 +277,9 @@ def check_seed(base_seed):
             closedMarkers.append(i)
 
     arranger = ""
-    accessableArrangers = ["A Gate"]
+    accessableArrangers = []
 
-    while not allSpots or len(accessableArrangers) > 0:
+    while arrangerStage != -1 or len(accessableArrangers) > 0:
         toRemove = []
         for i in range(len(closedMarkers)):
             index = closedMarkers[i]
@@ -292,21 +290,24 @@ def check_seed(base_seed):
         for i in range(len(toRemove)):
             closedMarkers.pop(toRemove[i] - (i - 1) - 1)
 
-        if not allSpots:
-            if (WorldB or WorldC) or (locked["A Star"] or locked["B Star"] or locked["C Star"]):
-                if (WorldB or WorldC):
-                    if arranger == "A Gate":
-                        accessableArrangers += ["B Gate", "C Gate"]
-                elif not placedStars:
-                    placedStars = True
-                    accessableArrangers += ["A Star", "B Star", "C Star"]
-            else:
-                if not placedItems:
-                    placedItems = True
-                    accessableArrangers += ["Connector", "Cube", "Fan", "Recorder", "Platform", "F1", "F3"]
-                elif placedItems and len(closedMarkers) == 0:
-                    allSpots = True
-                    accessableArrangers += ["F4", "F5", "F6", "A1 Gate", "F2"]
+        if arrangerStage == 0:
+            accessableArrangers = ["A Gate"]
+            arrangerStage += 1
+        elif arrangerStage == 1:
+            accessableArrangers = ["B Gate", "C Gate"]
+            arrangerStage += 1
+        elif arrangerStage == 2 and len(accessableArrangers) == 0:
+            accessableArrangers = ["Connector", "Cube", "Fan", "Recorder", "Platform"]
+            arrangerStage += 1
+        elif arrangerStage == 3 and len(accessableArrangers) == 0:
+            accessableArrangers = ["A Star", "B Star", "C Star"]
+            arrangerStage += 1
+        elif arrangerStage == 4 and len(accessableArrangers) == 0:
+            accessableArrangers = ["F1", "F2", "F3"]
+            arrangerStage += 1
+        elif arrangerStage == 5 and len(accessableArrangers) == 0:
+            accessableArrangers = ["F4", "F5", "F6", "A1 Gate"]
+            arrangerStage = -1
 
         index, seed = rand(0, len(accessableArrangers) - 1, seed)
         arranger = accessableArrangers.pop(index)
@@ -409,8 +410,10 @@ A_MARKERS = (
     ("A7-LFI", "A7-Trapped Inside", "A7-Two Buzzers", "A7-Star", "A7-WiaL", "A7-Pinhole")
 )
 
+
 def useful_sigil(sigil):
     return sigil[0] == "E" or sigil[:2] in ("DI", "DJ", "DL", "DZ", "NL", "NZ")
+
 
 """
     asoor outnumbered stbp pasl ->  3 for 2 + 1 each after
@@ -449,7 +452,7 @@ for seed_str in re.findall(r"^(\d+)", open("output.txt").read(), flags=re.M):
         score -= 2
     if useful_sigil(talosProgress["A6-Door too Far"]):
         score -= 1
-    
+
     min_worlds = 7
     for size in range(1, 8):
         for combo in itertools.permutations(A_MARKERS, size):
@@ -483,6 +486,6 @@ for seed_str in re.findall(r"^(\d+)", open("output.txt").read(), flags=re.M):
     score += (7 - min_worlds) * 5
     scored_seeds.append((seed_str, score))
 
-scored_seeds.sort(key=lambda x:x[1])
+scored_seeds.sort(key=lambda x: x[1])
 for i in scored_seeds[::-1]:
     print("{} ({})".format(i[0], i[1]))
