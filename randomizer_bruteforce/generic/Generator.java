@@ -48,7 +48,6 @@ public class Generator{
       "B5-Chambers", "C1-Blowback", "C2-Short Wall", "C3-Weathertop"
     };
 
-    private static TalosProgress empty;
     private TalosProgress progress;
     private RandomizerMode mode;
     private ScavengerMode scavenger;
@@ -869,6 +868,7 @@ public class Generator{
                 };
                 break;
             }
+            default: {}
         }
     }
 
@@ -1076,6 +1076,7 @@ public class Generator{
                                     accessableArrangers.addAll(Arrays.asList(Arranger.F1, Arranger.F6));
                                     break;
                                 }
+                                default: {}
                             }
                         }
                     } else if (mode == RandomizerMode.INTENDED) {
@@ -1289,6 +1290,7 @@ public class Generator{
                                     cIndexes = new ArrayList<Integer>();
                                     break;
                                 }
+                                default: {}
                             }
                             for (int world : indexesToAdd) {
                                 if (!closedMarkerIndexes.contains(world)) {
@@ -1353,6 +1355,7 @@ public class Generator{
                             cIndexes = new ArrayList<Integer>();
                             break;
                         }
+                        default: {}
                     }
 
                 }
