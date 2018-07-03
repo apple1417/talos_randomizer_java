@@ -7,7 +7,7 @@
    results, this isn't actually useful I was just curious
 */
 
-package randomizer_bruteforce.stars;
+package randomizer_bruteforce.all_default.a_stars;
 
 import java.util.ArrayList;
 import java.util.Arrays;

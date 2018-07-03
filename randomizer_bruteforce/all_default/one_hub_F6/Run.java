@@ -1,10 +1,8 @@
-package randomizer_bruteforce.stars;
-
-import randomizer_bruteforce.*;
+package randomizer_bruteforce.all_default.one_hub_F6;
 
 class Run {
     private static int THREAD_NUM = 8;
-    private static long PER_LOOP = 10000;
+    private static long PER_LOOP = 100000;
     private static long PER_THREAD = (PER_LOOP / THREAD_NUM);
     private static long current_seed = 0;
     private static long max_seed = 0x7FFFFFFF;

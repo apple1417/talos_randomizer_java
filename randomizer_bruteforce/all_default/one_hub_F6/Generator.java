@@ -1,4 +1,4 @@
-package randomizer_bruteforce.all_default;
+package randomizer_bruteforce.all_default.one_hub_F6;
 
 import java.io.IOException;
 import java.nio.file.Files;
