@@ -2,7 +2,7 @@ package randomizer_bruteforce;
 
 // Some basic stuff you need to start multithreading the generators
 
-public abstract class RunnableThread extends Thread {
+public abstract class RunnableThread extends Thread implements Runnable {
     private String threadName;
     public RunnableThread(String name) {
         threadName = name;

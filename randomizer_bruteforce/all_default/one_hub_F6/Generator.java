@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import randomizer_bruteforce.Enums.Arranger;
+import randomizer_bruteforce.GeneratorInterface;
 import randomizer_bruteforce.MarkerGroup;
 import randomizer_bruteforce.Rand;
 import randomizer_bruteforce.TalosProgress;
@@ -21,7 +22,7 @@ import randomizer_bruteforce.TalosProgress;
    slightly slower than) the generic default settings one
 */
 
-class Generator extends Thread implements Runnable {
+class Generator extends Thread implements Runnable, GeneratorInterface {
     public static final String GEN_TYPE = "All default, one hub F6";
     public static final String GEN_VERSION = "v11.0.1";
     private static HashMap<String, Integer> TETRO_INDEXES = new HashMap<String, Integer>();

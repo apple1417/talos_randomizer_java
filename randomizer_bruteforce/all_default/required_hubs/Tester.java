@@ -1,10 +1,12 @@
 package randomizer_bruteforce.all_default.required_hubs;
 
 import randomizer_bruteforce.all_default.generic.Generator;
-import randomizer_bruteforce.RunnableThread;
+import randomizer_bruteforce.SeedScheduler;
 import randomizer_bruteforce.TalosProgress;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-class Tester extends RunnableThread {
+class Tester extends SeedScheduler {
     // Just hardcode these three because it's easier than combining them
     private static String[] A_MARKERS = {
         "A1-PaSL", "A1-Beaten Path", "A1-Outnumbered", "A1-OtToU", "A1-ASooR", "A1-Trio", "A1-Peephole", "A1-Star",
@@ -51,67 +53,65 @@ class Tester extends RunnableThread {
 
     Tester(String name) {
         super(name);
+        gen = new Generator();
     }
 
-    private Generator gen = new Generator();
+    public static SeedScheduler createThread(String name) {
+        System.out.println("Made it");
+        return new Tester(name);
+    }
+
+    public static String getGenInfo() {
+        return String.format("%s, %s", Generator.GEN_TYPE, Generator.GEN_VERSION);
+    }
+
+    // Evaluate the seed
     private int one_hub = 0;
     private int two_hub = 0;
     private int three_hub = 0;
-    public void run() {
-        for(long i = min; i <= max; i++) {
-            TalosProgress progress;
-            try {
-                progress = gen.generate(i);
-            } catch (Exception e) {
-                System.out.println(String.format("Seed %d fails to generate", i));
-                continue;
+    public void evaluate(TalosProgress progress) {
+        // One hub seeds
+        if (isCompleteable(progress, A_MARKERS)) {
+            one_hub++;
+            return;
+        }
+
+        int DI_count = 0;
+        int DJ_count = 0;
+        for (String marker : A_MARKERS) {
+            String sigil = TalosProgress.TETROS[progress.getVar(marker) - 1];
+            if (sigil.startsWith("DI")) {
+                DI_count++;
+            } else if (sigil.startsWith("DJ")) {
+                DI_count++;
+            }
+        }
+
+        // Both hubs
+        if (DI_count >= 2 && DJ_count >= 3) {
+            if (isCompleteable(progress, A_B_MARKERS)
+                || isCompleteable(progress, A_C_MARKERS)) {
+                two_hub++;
+            } else {
+                three_hub++;
             }
 
-            // Evaluate the seed
-
-            // One hub seeds
-            if (isCompleteable(progress, A_MARKERS)) {
-                one_hub++;
-                continue;
+        // B first
+        } else if (DI_count >= 2) {
+            if (isCompleteable(progress, A_B_MARKERS)) {
+                two_hub++;
+            } else {
+                three_hub++;
             }
 
-            int DI_count = 0;
-            int DJ_count = 0;
-            for (String marker : A_MARKERS) {
-                String sigil = TalosProgress.TETROS[progress.getVar(marker) - 1];
-                if (sigil.startsWith("DI")) {
-                    DI_count++;
-                } else if (sigil.startsWith("DJ")) {
-                    DI_count++;
-                }
+        // C first
+        } else if (DJ_count >= 3) {
+            if (isCompleteable(progress, A_C_MARKERS)) {
+                two_hub++;
+            } else {
+                three_hub++;
             }
 
-            // Both hubs
-            if (DI_count >= 2 && DJ_count >= 3) {
-                if (isCompleteable(progress, A_B_MARKERS)
-                    || isCompleteable(progress, A_C_MARKERS)) {
-                    two_hub++;
-                } else {
-                    three_hub++;
-                }
-
-            // B first
-            } else if (DI_count >= 2) {
-                if (isCompleteable(progress, A_B_MARKERS)) {
-                    two_hub++;
-                } else {
-                    three_hub++;
-                }
-
-            // C first
-            } else if (DJ_count >= 3) {
-                if (isCompleteable(progress, A_C_MARKERS)) {
-                    two_hub++;
-                } else {
-                    three_hub++;
-                }
-
-            }
         }
     }
 
@@ -161,62 +161,19 @@ class Tester extends RunnableThread {
                     && NZ_count >= 3);
     }
 
-    public int[] getData() {
-        waitFinished();
-        return new int[] {one_hub, two_hub, three_hub};
+    public ArrayList<Integer> getData() {
+        return new ArrayList<Integer>(Arrays.asList(one_hub, two_hub, three_hub));
     }
 
-    /*
-      I really wish there was a way to have this bit predefined somewhere but I need to make
-       sure it uses the right class for the threads which just gets awkward
-    */
-    private static int THREAD_NUM = 8;
-    private static int PER_LOOP = 100000;
-    private static int PER_THREAD = (PER_LOOP / THREAD_NUM);
-    private static int current_seed = 0;
-    private static int max_seed = 0x7FFFFFFF;
-    private static int data[] = new int[3];
+    private static int[] data = new int[3];
+    public static void processData(ArrayList output) {
+        data[0] += (int)output.get(0);
+        data[1] += (int)output.get(1);
+        data[2] += (int)output.get(2);
+    }
 
-    public static void main(String[] args) {
-        // So Ctrl-C gives some output
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                System.out.println(String.format("Stopped while working on batch starting at %d", current_seed));
-                System.out.println(String.format("%d %d %d", data[0], data[1], data[2]));
-                System.out.println(String.format("%.2f%% %.2f%% %.2f%%", (float)data[0]*100/current_seed, (float)data[1]*100/current_seed, (float)data[2]*100/current_seed));
-            }
-        });
-
-        while (current_seed + PER_LOOP < max_seed) {
-            // Need to create new threads because you can't restart them
-            Tester[] threads = new Tester[THREAD_NUM];
-            for (int i = 0; i < THREAD_NUM; i++) {
-                threads[i] = new Tester(Integer.toString(i));
-                threads[i].start(current_seed, current_seed + PER_THREAD - 1);
-                current_seed += PER_THREAD;
-            }
-            // Get data out
-            for (Tester thread : threads) {
-                int[] output = thread.getData();
-                data[0] += output[0];
-                data[1] += output[1];
-                data[2] += output[2];
-            }
-            // Occasionally print info
-            if (current_seed % 10000000 == 0) {
-                System.out.println(current_seed);
-                System.out.println(String.format("%d %d %d", data[0], data[1], data[2]));
-                System.out.println(String.format("%.2f%% %.2f%% %.2f%%", (float)data[0]*100/current_seed, (float)data[1]*100/current_seed, (float)data[2]*100/current_seed));
-            }
-        }
-        // At this point we probably can't evenly split stuff so one thread can do the rest
-        Tester thread = new Tester("0");
-        thread.start(current_seed, 0x7FFFFFFF);
-        int[] output = thread.getData();
-        data[0] += output[0];
-        data[1] += output[1];
-        data[2] += output[2];
-        System.out.println("Finished\n=============================================");
-        // The program ending also triggers the output printing
+    public static void showData() {
+        System.out.println(String.format("%d %d %d", data[0], data[1], data[2]));
+        System.out.println(String.format("%.2f%% %.2f%% %.2f%%", (float)data[0]*100/current_seed, (float)data[1]*100/current_seed, (float)data[2]*100/current_seed));
     }
 }
