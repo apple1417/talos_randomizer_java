@@ -4,6 +4,7 @@ import randomizer_bruteforce.all_default.generic.Generator;
 import randomizer_bruteforce.TalosProgress;
 
 class Tester extends Thread implements Runnable {
+    // Just hardcode these three because it's easier than combining them
     private static String[] A_MARKERS = {
         "A1-PaSL", "A1-Beaten Path", "A1-Outnumbered", "A1-OtToU", "A1-ASooR", "A1-Trio", "A1-Peephole", "A1-Star",
         "A2-Guards", "A2-Hall of Windows", "A2-Suicide Mission", "A2-Star",
@@ -47,6 +48,7 @@ class Tester extends Thread implements Runnable {
         "CM-Star"
     };
 
+    // Thread setup
     private Thread t;
     private String threadName;
     Tester(String name) {
@@ -80,6 +82,9 @@ class Tester extends Thread implements Runnable {
                 continue;
             }
 
+            // Evaluate the seed
+
+            // One hub seeds
             if (completable(progress, A_MARKERS)) {
                 one_hub++;
                 continue;
@@ -125,6 +130,7 @@ class Tester extends Thread implements Runnable {
         }
     }
 
+    // Only good way to do this is get the count of each type of shape
     private boolean completable(TalosProgress progress, String[] markersToCheck) {
         int E_count = 0;
         int ML_count = 0;
@@ -160,19 +166,72 @@ class Tester extends Thread implements Runnable {
                 }
             }
         }
-
+                // F6
         return (E_count >= 9 && NL_count >= 2 && NZ_count >= 2)
+                // F2
                 || (ML_count >= 1 && MT_count >= 2 && MZ_count >= 1
                     && NL_count >= 6 && NO_count >= 1 && NT_count >= 4 && NZ_count >= 2)
+                 // F3
                 || (NI_count >= 4 && NJ_count >= 2 && NL_count >= 4 && NS_count >= 1
-                    && NZ_count >= 3)
-               ;
+                    && NZ_count >= 3);
     }
 
+    // Need to run this to finish threads, easy way to get data out too
     public int[] waitFinishedAndGetData() {
         try {
             t.join();
         } catch (InterruptedException e) {}
         return new int[] {one_hub, two_hub, three_hub};
+    }
+
+
+    private static int THREAD_NUM = 8;
+    private static long PER_LOOP = 100000;
+    private static long PER_THREAD = (PER_LOOP / THREAD_NUM);
+    private static long current_seed = 0;
+    private static long max_seed = 0x7FFFFFFF;
+    private static int data[] = new int[3];
+
+    public static void main(String[] args) {
+        // So Ctrl-C gives some output
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                System.out.println(String.format("Stopped while working on batch starting at %d", current_seed));
+                System.out.println(String.format("%d %d %d", data[0], data[1], data[2]));
+                System.out.println(String.format("%.2f%% %.2f%% %.2f%%", (float)data[0]*100/current_seed, (float)data[1]*100/current_seed, (float)data[2]*100/current_seed));
+            }
+        });
+
+        while (current_seed + PER_LOOP < max_seed) {
+            // Need to create enw threads because you can't restart them
+            Tester[] threads = new Tester[THREAD_NUM];
+            for (int i = 0; i < THREAD_NUM; i++) {
+                threads[i] = new Tester(Integer.toString(i));
+                threads[i].start(current_seed, current_seed + PER_THREAD - 1);
+                current_seed += PER_THREAD;
+            }
+            // Get data out
+            for (Tester thread : threads) {
+                int[] output = thread.waitFinishedAndGetData();
+                data[0] += output[0];
+                data[1] += output[1];
+                data[2] += output[2];
+            }
+            // Occasionally print info
+            if (current_seed % 10000000 == 0) {
+                System.out.println(current_seed);
+                System.out.println(String.format("%d %d %d", data[0], data[1], data[2]));
+                System.out.println(String.format("%.2f%% %.2f%% %.2f%%", (float)data[0]*100/current_seed, (float)data[1]*100/current_seed, (float)data[2]*100/current_seed));
+            }
+        }
+        // At this point we probably can't evenly split stuff so one thread can do the rest
+        Tester thread = new Tester("0");
+        thread.start(current_seed, 0x7FFFFFFF);
+        int[] output = thread.waitFinishedAndGetData();
+        data[0] += output[0];
+        data[1] += output[1];
+        data[2] += output[2];
+        System.out.println("Finished\n=============================================");
+        // The program ending also triggers the output printing
     }
 }
