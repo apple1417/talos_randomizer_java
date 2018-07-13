@@ -19,7 +19,7 @@ class FindMax extends RunnableThread {
         "A7-LFI", "A7-Trapped Inside", "A7-Two Buzzers", "A7-Star", "A7-WiaL", "A7-Pinhole"
     };
     // How many stars are notable enough to cause the seed to be print
-    private static int NOTABLE_MIN = 20;
+    private static int NOTABLE_MIN = 21;
 
     FindMax(String name) {
         super(name);
@@ -48,7 +48,7 @@ class FindMax extends RunnableThread {
                 String output = String.format("%d (%d)", seed, starCount);
                 System.out.println(output);
                 try {
-                    Files.write(Paths.get("randomizer_bruteforce/a_stars/output.txt"), (output + "\n").getBytes(), StandardOpenOption.APPEND);
+                    Files.write(Paths.get("randomizer_bruteforce/all_default/a_stars/output.txt"), (output + "\n").getBytes(), StandardOpenOption.APPEND);
                 } catch (IOException e) {}
             }
         }
@@ -61,8 +61,8 @@ class FindMax extends RunnableThread {
     private static int THREAD_NUM = 8;
     private static int PER_LOOP = 100000;
     private static int PER_THREAD = (PER_LOOP / THREAD_NUM);
-    private static int current_seed = 0;
-    private static int max_seed = 0x7FFFFFFF;
+    private static long current_seed = 0;
+    private static long max_seed = 0x7FFFFFFF;
 
     public static void main(String[] args) {
         // So Ctrl-C gives some output
@@ -73,8 +73,8 @@ class FindMax extends RunnableThread {
         });
 
         try {
-            current_seed = Math.max(0, Integer.parseInt(args[0]));
-            max_seed = Math.max(current_seed, Math.min(0x7FFFFFFF, Integer.parseInt(args[1])));
+            current_seed = Math.max(0, Long.parseLong(args[0]));
+            max_seed = Math.max(current_seed, Math.min(0x7FFFFFFF, Long.parseLong(args[1])));
         } catch (ArrayIndexOutOfBoundsException|NumberFormatException e){}
 
         System.out.println(String.format("Using generator: %s, %s", Generator.GEN_TYPE, Generator.GEN_VERSION));

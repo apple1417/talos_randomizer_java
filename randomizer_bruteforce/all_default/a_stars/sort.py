@@ -1,8 +1,13 @@
 import re
 
+# Sort by the amount of stars
+
 seeds = []
 for match in re.finditer(r"(\d+) \((\d+)\)", open("output.txt").read()):
-    seeds.append((int(match.group(1)), int(match.group(2))))
+    # Got halfway through and realized the amount of seeds with 20 so I changed the min,
+    #  but they'd still be in the output
+    if int(match.group(2)) > 20:
+        seeds.append((int(match.group(1)), int(match.group(2))))
 
 seeds = sorted(seeds, key=lambda x: x[1])[::-1]
 
