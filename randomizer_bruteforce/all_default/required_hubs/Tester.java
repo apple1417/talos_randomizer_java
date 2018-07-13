@@ -1,9 +1,10 @@
 package randomizer_bruteforce.all_default.required_hubs;
 
 import randomizer_bruteforce.all_default.generic.Generator;
+import randomizer_bruteforce.generic.RunnableThread;
 import randomizer_bruteforce.TalosProgress;
 
-class Tester extends Thread implements Runnable {
+class Tester extends RunnableThread {
     // Just hardcode these three because it's easier than combining them
     private static String[] A_MARKERS = {
         "A1-PaSL", "A1-Beaten Path", "A1-Outnumbered", "A1-OtToU", "A1-ASooR", "A1-Trio", "A1-Peephole", "A1-Star",
@@ -48,24 +49,8 @@ class Tester extends Thread implements Runnable {
         "CM-Star"
     };
 
-    // Thread setup
-    private Thread t;
-    private String threadName;
     Tester(String name) {
-        threadName = name;
-    }
-
-    private long min;
-    private long max;
-    public void start(long min, long max) {
-        this.min = min;
-        this.max = max;
-        if (t == null) {
-            t = new Thread(this, threadName);
-            t.start();
-        } else {
-            System.out.println(String.format("Thread %s already running", threadName));
-        }
+        super(name);
     }
 
     private Generator gen = new Generator();
@@ -85,7 +70,7 @@ class Tester extends Thread implements Runnable {
             // Evaluate the seed
 
             // One hub seeds
-            if (completable(progress, A_MARKERS)) {
+            if (isCompleteable(progress, A_MARKERS)) {
                 one_hub++;
                 continue;
             }
@@ -103,8 +88,8 @@ class Tester extends Thread implements Runnable {
 
             // Both hubs
             if (DI_count >= 2 && DJ_count >= 3) {
-                if (completable(progress, A_B_MARKERS)
-                    || completable(progress, A_C_MARKERS)) {
+                if (isCompleteable(progress, A_B_MARKERS)
+                    || isCompleteable(progress, A_C_MARKERS)) {
                     two_hub++;
                 } else {
                     three_hub++;
@@ -112,7 +97,7 @@ class Tester extends Thread implements Runnable {
 
             // B first
             } else if (DI_count >= 2) {
-                if (completable(progress, A_B_MARKERS)) {
+                if (isCompleteable(progress, A_B_MARKERS)) {
                     two_hub++;
                 } else {
                     three_hub++;
@@ -120,7 +105,7 @@ class Tester extends Thread implements Runnable {
 
             // C first
             } else if (DJ_count >= 3) {
-                if (completable(progress, A_C_MARKERS)) {
+                if (isCompleteable(progress, A_C_MARKERS)) {
                     two_hub++;
                 } else {
                     three_hub++;
@@ -131,7 +116,7 @@ class Tester extends Thread implements Runnable {
     }
 
     // Only good way to do this is get the count of each type of shape
-    private boolean completable(TalosProgress progress, String[] markersToCheck) {
+    private boolean isCompleteable(TalosProgress progress, String[] markersToCheck) {
         int E_count = 0;
         int ML_count = 0;
         int MT_count = 0;
@@ -176,11 +161,8 @@ class Tester extends Thread implements Runnable {
                     && NZ_count >= 3);
     }
 
-    // Need to run this to finish threads, easy way to get data out too
-    public int[] waitFinishedAndGetData() {
-        try {
-            t.join();
-        } catch (InterruptedException e) {}
+    public int[] getData() {
+        waitFinished();
         return new int[] {one_hub, two_hub, three_hub};
     }
 
@@ -203,7 +185,7 @@ class Tester extends Thread implements Runnable {
         });
 
         while (current_seed + PER_LOOP < max_seed) {
-            // Need to create enw threads because you can't restart them
+            // Need to create new threads because you can't restart them
             Tester[] threads = new Tester[THREAD_NUM];
             for (int i = 0; i < THREAD_NUM; i++) {
                 threads[i] = new Tester(Integer.toString(i));
@@ -212,7 +194,7 @@ class Tester extends Thread implements Runnable {
             }
             // Get data out
             for (Tester thread : threads) {
-                int[] output = thread.waitFinishedAndGetData();
+                int[] output = thread.getData();
                 data[0] += output[0];
                 data[1] += output[1];
                 data[2] += output[2];
@@ -227,7 +209,7 @@ class Tester extends Thread implements Runnable {
         // At this point we probably can't evenly split stuff so one thread can do the rest
         Tester thread = new Tester("0");
         thread.start(current_seed, 0x7FFFFFFF);
-        int[] output = thread.waitFinishedAndGetData();
+        int[] output = thread.getData();
         data[0] += output[0];
         data[1] += output[1];
         data[2] += output[2];
