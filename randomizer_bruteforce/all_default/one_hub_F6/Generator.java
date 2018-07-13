@@ -12,9 +12,18 @@ import randomizer_bruteforce.MarkerGroup;
 import randomizer_bruteforce.Rand;
 import randomizer_bruteforce.TalosProgress;
 
+/*
+  This is very similar to the generic generator, with all the same optimizations, but there's
+   one more - if a grey sigil is placed outside of A we can immediently abort generation
+  F6 is generally placed quite late but this still ends up giving roughly a 10% speed boost
+
+  If used to generate seeds already known to work it'll be the exact same speed as (if not
+   slightly slower than) the generic default settings one
+*/
+
 class Generator extends Thread implements Runnable {
-    public static String GEN_TYPE = "All default, one hub F6";
-    public static String GEN_VERSION = "v11.0.1";
+    public static final String GEN_TYPE = "All default, one hub F6";
+    public static final String GEN_VERSION = "v11.0.1";
     private static HashMap<String, Integer> TETRO_INDEXES = new HashMap<String, Integer>();
     private static HashMap<Arranger, String[]> BACKUP_LOCKED = new HashMap<Arranger, String[]>();
     private HashMap<Arranger, String[]> locked = new HashMap<Arranger, String[]>(BACKUP_LOCKED);
@@ -135,10 +144,7 @@ class Generator extends Thread implements Runnable {
         )))
     };
 
-    private Thread t;
-    private String threadName;
-    Generator(String name) {
-        threadName = name;
+    Generator() {
         BACKUP_LOCKED.put(Arranger.A1_GATE, new String[] {});
         BACKUP_LOCKED.put(Arranger.A_GATE, new String[] {"DI1", "DJ3", "DL1", "DZ2"});
         BACKUP_LOCKED.put(Arranger.B_GATE, new String[] {});
@@ -163,31 +169,7 @@ class Generator extends Thread implements Runnable {
         }
     }
 
-    private long min;
-    private long max;
-    public void start(long min, long max) {
-        this.min = min;
-        this.max = max;
-        if (t == null) {
-            t = new Thread(this, threadName);
-            t.start();
-        } else {
-            System.out.println(String.format("Thread %s already running", threadName));
-        }
-    }
-
-    public void run() {
-        for(long i = min; i <= max; i++) {
-            check(i);
-        }
-    }
-
-    public void waitFinished() {
-        try {
-            t.join();
-        } catch (InterruptedException e) {}
-    }
-
+    // We can't just return null but an uninitalized TalosProgress is good enough
     private static TalosProgress empty;
     public TalosProgress generate(long seed) {
         TalosProgress progress = new TalosProgress();
@@ -338,6 +320,7 @@ class Generator extends Thread implements Runnable {
                         index -= group.getSize();
                     } else {
                         String randMarker = group.getMarkers().remove(index);
+                        // If a grey is placed outside of A (or in A star), immediently return
                         if (sigil.charAt(0) == 'E' && (randMarker.charAt(0) != 'A' || randMarker.charAt(1) == '*')) {
                             return empty;
                         }
@@ -355,7 +338,10 @@ class Generator extends Thread implements Runnable {
     }
 
     public boolean check(long seed) {
-        TalosProgress progress = generate(seed);
+        return check(generate(seed));
+    }
+
+    public boolean check(TalosProgress progress) {
         if (progress == null) {
             return false;
         }
@@ -370,10 +356,10 @@ class Generator extends Thread implements Runnable {
             }
         }
         if (lCount >= 2 && zCount >= 2) {
-            String output = String.format("%d, %s, %d", seed, progress.getChecksum(), progress.getVar("Code_Floor6"));
+            String output = String.format("%d, %s, %d", progress.getVar("Randomizer_Seed"), progress.getChecksum(), progress.getVar("Code_Floor6"));
             System.out.println(output);
             try {
-                Files.write(Paths.get("randomizer_bruteforce/all_default/output.txt"), (output + "\n").getBytes(), StandardOpenOption.APPEND);
+                Files.write(Paths.get("randomizer_bruteforce/all_default/one_hub_F6/output.txt"), (output + "\n").getBytes(), StandardOpenOption.APPEND);
             } catch (IOException e) {}
             return true;
         }

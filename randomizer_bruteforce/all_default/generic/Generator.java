@@ -9,8 +9,12 @@ import randomizer_bruteforce.Rand;
 import randomizer_bruteforce.TalosProgress;
 
 public class Generator {
-    public static String GEN_TYPE = "All default";
-    public static String GEN_VERSION = "v11.0.1";
+    public static final String GEN_TYPE = "All default";
+    public static final String GEN_VERSION = "v11.0.1";
+    /*
+      Define all our constants
+      A few variables get destroyed during generation so they have backup versions
+    */
     private static HashMap<String, Integer> TETRO_INDEXES = new HashMap<String, Integer>();
     private static HashMap<Arranger, String[]> BACKUP_LOCKED = new HashMap<Arranger, String[]>();
     private HashMap<Arranger, String[]> locked = new HashMap<Arranger, String[]>(BACKUP_LOCKED);
@@ -20,6 +24,13 @@ public class Generator {
         "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "CMessenger"
     };
 
+    /*
+      I'm not checking worlds here because random portals is off, so the three
+       groups that don't normally have a world assigned go first, as they'd
+       normally be first on the list to be checked
+      I can also combine marker groups that would normally unlock at the same time,
+       as long as it doesn't change the overall order or the markers
+    */
     private MarkerGroup[] BACKUP_MARKERS = {
         new MarkerGroup(() -> true, new ArrayList<String>(Arrays.asList(
             "A1-Peephole", "A1-PaSL", "A1-Outnumbered", "A1-ASooR",
@@ -124,6 +135,7 @@ public class Generator {
 
     public Generator() {
         BACKUP_LOCKED.put(Arranger.A1_GATE, new String[] {});
+        // No random portals means we alwasy start in A, so A gate would be fixed
         BACKUP_LOCKED.put(Arranger.A_GATE, new String[] {"DI1", "DJ3", "DL1", "DZ2"});
         BACKUP_LOCKED.put(Arranger.B_GATE, new String[] {});
         BACKUP_LOCKED.put(Arranger.C_GATE, new String[] {});
@@ -152,17 +164,20 @@ public class Generator {
         progress.setVar("Randomizer_Seed", (int)seed);
         Rand r = new Rand(seed);
 
+        // Clone what would normally be destroyed
         locked = new HashMap<Arranger, String[]>(BACKUP_LOCKED);
         MarkerGroup[] markers = new MarkerGroup[BACKUP_MARKERS.length];
         for (int i = 0; i < BACKUP_MARKERS.length; i++) {
             markers[i] = BACKUP_MARKERS[i].clone();
         }
 
+        // These help with the checksum, can't just do dummy calls
         progress.setVar("PaintItemSeed", r.next(0, 8909478));
         progress.setVar("Code_Floor4", r.next(1, 999));
         progress.setVar("Code_Floor5", r.next(1, 999));
         progress.setVar("Code_Floor6", r.next(4, 9)*100 + r.next(4, 9)*10 + r.next(4, 9));
 
+        // Portals will always be in this order, just need it for the checksum
         for (int i = 0; i < PORTAL_ORDER.length; i++) {
             progress.setVar(PORTAL_ORDER[i], i + 1);
         }
@@ -173,19 +188,23 @@ public class Generator {
         Arranger currentArranger;
         ArrayList<Arranger> accessableArrangers = new ArrayList<Arranger>();
         ArrayList<MarkerGroup> openMarkers = new ArrayList<MarkerGroup>();
+        // I still need to use the open/closed markers system but I can hardcode the indexes
         ArrayList<Integer> closedMarkers = new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5, 6));
 
         while (arrangerStage != -1 || accessableArrangers.size() > 0) {
+            // Find new markers
             for (int i = 0; i < closedMarkers.size(); i++) {
                 int index = closedMarkers.get(i);
                 if (markers[index].isOpen()) {
                     openMarkers.add(markers[index]);
                     closedMarkers.remove(i);
                     availableMarkers += markers[index].getSize();
+                    // Indexes shift down when we remove something
                     i--;
                 }
             }
 
+            // Work out arranger unlocking
             switch (arrangerStage) {
                 case 0: {
                     accessableArrangers.add(Arranger.A_GATE);
@@ -229,6 +248,11 @@ public class Generator {
 
             currentArranger = accessableArrangers.remove(r.next(0, accessableArrangers.size() - 1));
             String[] sigils = locked.remove(currentArranger);
+
+            /*
+              Wrong hub softlock prevention
+              This is slightly simpler because we know you're going to start in A
+            */
             if (checkGates && (currentArranger == Arranger.B_GATE || currentArranger == Arranger.C_GATE)) {
                 if (r.next(0, 99) < 25) {
                     sigils = new String[] {
@@ -257,6 +281,7 @@ public class Generator {
                         closedMarkers.addAll(Arrays.asList(14, 15, 16, 17, 18, 19, 20, 21, 22, 23));
                     }
 
+                    // Find new spots
                     ArrayList<MarkerGroup> tempOpenMarkers = new ArrayList<MarkerGroup>();
                     int tempAvailableMarkers = 0;
                     for (int index : closedMarkers) {
@@ -266,6 +291,7 @@ public class Generator {
                         }
                     }
 
+                    // Place unique sigils in new spots
                     for (String sigil : uniqueSigils) {
                         int index = r.next(0, tempAvailableMarkers - 1);
                         for (MarkerGroup group : tempOpenMarkers) {
@@ -289,6 +315,7 @@ public class Generator {
                 }
             }
 
+            // Place sigils
             for (String sigil : sigils) {
                 int index = r.next(0, availableMarkers - 1);
                 for (MarkerGroup group : openMarkers) {

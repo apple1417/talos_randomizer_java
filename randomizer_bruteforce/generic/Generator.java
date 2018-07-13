@@ -10,9 +10,20 @@ import randomizer_bruteforce.MarkerGroup;
 import randomizer_bruteforce.Rand;
 import randomizer_bruteforce.TalosProgress;
 
-public class Generator{
-    public static String GEN_TYPE = "Generic";
-    public static String GEN_VERSION = "v11.0.1";
+/*
+  A full simulator of the standard lua generator
+  This is of course going to be slower than a specialized one, but it can do everything
+   without needing you to do any work beforehand
+*/
+
+public class Generator {
+    public static final String GEN_TYPE = "Generic";
+    public static final String GEN_VERSION = "v11.0.1";
+
+    /*
+      Define all our constants
+      A few variables get destroyed during generation so they have backup versions
+    */
     private static HashMap<String, Integer> TETRO_INDEXES = new HashMap<String, Integer>();
     private static HashMap<Arranger, ArrayList<String>> BACKUP_ARRANGER_SIGILS = new HashMap<Arranger, ArrayList<String>>();
     private HashMap<Arranger, ArrayList<String>> arrangerSigils = new HashMap<Arranger, ArrayList<String>>(BACKUP_ARRANGER_SIGILS);
@@ -55,6 +66,7 @@ public class Generator{
     private boolean loop;
     private HashSet<World> openWorlds;
 
+    // These two helper functions are used in the marker lists to define when groups unlock
     private boolean unlocked(Arranger arrangerName) {
         return !arrangerSigils.containsKey(arrangerName);
     }
@@ -78,10 +90,10 @@ public class Generator{
         return starOverride && openWorlds.contains(worldName);
     }
 
-    public Generator(HashMap<String, Integer> options) {
-        BACKUP_PROGRESS = new TalosProgress(options);
+    public Generator(TalosProgress progress) {
+        BACKUP_PROGRESS = progress.clone();
 
-        progress = BACKUP_PROGRESS.clone();
+        // Check what options have been set
         mode = RandomizerMode.fromInt(progress.getVar("Randomizer_Mode"));
         scavenger = ScavengerMode.fromInt(progress.getVar("Randomizer_Scavenger"));
         portals = progress.getVar("Randomizer_Portals") != -1;
@@ -93,6 +105,7 @@ public class Generator{
             BACKUP_ARRANGER_SIGILS.put(Arranger.B_GATE, new ArrayList<String>());
             BACKUP_ARRANGER_SIGILS.put(Arranger.C_GATE, new ArrayList<String>());
         } else {
+            // Scavenger and mobius both don't care about greens so we can restore these
             BACKUP_ARRANGER_SIGILS.put(Arranger.A1_GATE, new ArrayList<String>(Arrays.asList("DJ1", "DJ2", "DZ1")));
             BACKUP_ARRANGER_SIGILS.put(Arranger.A_GATE, new ArrayList<String>(Arrays.asList("DI1", "DJ3", "DL1", "DZ2")));
             BACKUP_ARRANGER_SIGILS.put(Arranger.B_GATE, new ArrayList<String>(Arrays.asList("DI2", "DL2", "DT1", "DT2", "DZ3")));
@@ -117,6 +130,11 @@ public class Generator{
             TETRO_INDEXES.put(TalosProgress.TETROS[i], i + 1);
         }
 
+        /*
+          All the marker groups
+          These are the exact same as in the normal lua script, using regex you can convert
+           them from one format almost straight into the other with minial effort
+        */
         switch(mode) {
             case DEFAULT: {
                 BACKUP_MARKERS = new MarkerGroup[] {
@@ -872,8 +890,12 @@ public class Generator{
         }
     }
 
+    public Generator(HashMap<String, Integer> options) {
+        this(new TalosProgress(options));
+    }
+
     public Generator() {
-        this(new HashMap<String, Integer>());
+        this(new TalosProgress());
     }
 
     public TalosProgress generate(long seed) {
@@ -881,17 +903,20 @@ public class Generator{
         progress.setVar("Randomizer_Seed", (int)seed);
         Rand r = new Rand(seed);
 
+        // Clone the variables we will be destroying
         arrangerSigils = new HashMap<Arranger, ArrayList<String>>(BACKUP_ARRANGER_SIGILS);
         MarkerGroup[] markers = new MarkerGroup[BACKUP_MARKERS.length];
         for (int i = 0; i < BACKUP_MARKERS.length; i++) {
             markers[i] = BACKUP_MARKERS[i].clone();
         }
 
+        // Important for checksum and to advance rng
         progress.setVar("PaintItemSeed", r.next(0, 8909478));
         progress.setVar("Code_Floor4", r.next(1, 999));
         progress.setVar("Code_Floor5", r.next(1, 999));
         progress.setVar("Code_Floor6", r.next(4, 9)*100 + r.next(4, 9)*10 + r.next(4, 9));
 
+        // Decide what scavenger ending we're doing
         ScavengerEnding scavengerGoal = ScavengerEnding.NONE;
         if (scavenger != ScavengerMode.OFF) {
             int endingIndex;
@@ -907,6 +932,7 @@ public class Generator{
             progress.setVar("Randomizer_ScavengerMode", endingIndex + 1);
         }
 
+        // Randomize the portals
         World[] portalOrder = World.values();
         Hub startHub = Hub.A;
         if (loop) {
@@ -929,6 +955,7 @@ public class Generator{
             }
 
             int index = r.next(0, 21);
+            // Intended and short scavenger have to go into A
             if (mode == RandomizerMode.INTENDED || scavenger == ScavengerMode.SHORT) {
                 index = r.next(0, 7);
             }
@@ -948,6 +975,8 @@ public class Generator{
         for (int i = 0; i < portalOrder.length; i++) {
             progress.setVar(portalOrder[i].toString(), i + 1);
         }
+
+        // Work out which indexes in the marker list will be accessable in which hub
         if (mode != RandomizerMode.NONE && mode != RandomizerMode.FULLY_RANDOM) {
             ArrayList<Integer> closedMarkerIndexes = new ArrayList<Integer>();
             ArrayList<Integer> aIndexes = new ArrayList<Integer>();
@@ -975,6 +1004,7 @@ public class Generator{
                 }
             }
 
+            // Based on starting hub restore one arranger and setup some variables
             ArrayList<Integer> indexesToAdd = new ArrayList<Integer>();
             ArrayList<Arranger> lastHubs = new ArrayList<Arranger>();
             switch (startHub) {
@@ -1000,6 +1030,7 @@ public class Generator{
                     break;
                 }
             }
+            // Add worlds to openWorlds
             openWorlds = new HashSet<World>();
             for (int world : indexesToAdd) {
                 closedMarkerIndexes.add(world);
@@ -1007,6 +1038,7 @@ public class Generator{
             }
 
             boolean checkGates = true;
+            // Small extra setup for mobius and scavenger, which don't care about greens
             if (loop || scavenger == ScavengerMode.FULL) {
                 checkGates = false;
                 indexesToAdd = new ArrayList<Integer>();
@@ -1024,6 +1056,7 @@ public class Generator{
                 }
             }
 
+            // In intended F3 star won't unlock in time so we manually set it to what it could be
             if (mode == RandomizerMode.INTENDED && scavenger == ScavengerMode.OFF) {
                 String sigil;
                 String marker = "F3-Star";
@@ -1037,23 +1070,32 @@ public class Generator{
                 arrangerSigils.put(Arranger.A1_GATE, new ArrayList<String>(Arrays.asList("DJ1", "DJ2", "DZ1")));
             }
 
+            // The main loop
             int arrangerStage = 0;
             int availableMarkers = 0;
             ArrayList<MarkerGroup> openMarkerGroups = new ArrayList<MarkerGroup>();
             ArrayList<Arranger> accessableArrangers = new ArrayList<Arranger>();
             Arranger pickedArranger = Arranger.NONE;
             while (arrangerStage != -1 || accessableArrangers.size() > 0) {
+                // Find new markers
                 for (int i = 0; i < closedMarkerIndexes.size(); i++) {
                     int index = closedMarkerIndexes.get(i);
                     if (markers[index].isOpen()) {
                         openMarkerGroups.add(markers[index]);
                         closedMarkerIndexes.remove(i);
                         availableMarkers += markers[index].getSize();
+                        // Indexes shift down when we remove something
                         i--;
                     }
                 }
 
+                // Work out arranger unlocking
                 if (arrangerStage != -1) {
+                    /*
+                      Scavenger Hunt
+                      0. A1 Gate (If in Intended Mode)
+                      1. ALl the arrangers for the relevant ending
+                    */
                     if (scavenger != ScavengerMode.OFF) {
                         if (mode == RandomizerMode.INTENDED && !unlocked(Arranger.A1_GATE)) {
                             accessableArrangers.add(Arranger.A1_GATE);
@@ -1079,6 +1121,17 @@ public class Generator{
                                 default: {}
                             }
                         }
+                    /*
+                      Intended
+                      1. A1 Gate
+                      2. Conenctor + Cube
+                      3. A Gate
+                      4. Other Hubs
+                      5. Other Items
+                      6. Star worlds
+                      7. F1
+                      8. Other Tower Floors
+                    */
                     } else if (mode == RandomizerMode.INTENDED) {
                         switch (arrangerStage) {
                             case 0: {
@@ -1129,6 +1182,15 @@ public class Generator{
                                 arrangerStage = -1;
                             }
                         }
+                    /*
+                      Default
+                      1. Starting hub
+                      2. Other Hubs
+                      3. Items
+                      4. Star Worlds
+                      5. F1 F2 F3
+                      6. Everything else
+                    */
                     } else {
                         switch (arrangerStage) {
                             case 0: {
@@ -1195,8 +1257,10 @@ public class Generator{
                 pickedArranger = accessableArrangers.remove(r.next(0, accessableArrangers.size() - 1));
                 ArrayList<String> sigils = arrangerSigils.remove(pickedArranger);
 
+                // Wrong hub softlock prevention
                 if (checkGates) {
                     if (lastHubs.contains(pickedArranger)) {
+                        // Both hubs
                         if (r.next(0, 99) < 25) {
                             switch (startHub) {
                                 case A: {
@@ -1244,6 +1308,7 @@ public class Generator{
                                 }
                                 openWorlds.add(markers[world].getWorld());
                             }
+                        // One hub
                         } else {
                             ArrayList<String> uniqueSigils = new ArrayList<String>();
                             switch (pickedArranger) {
@@ -1304,6 +1369,7 @@ public class Generator{
                                 uniqueSigils.remove("DJ1");
                             }
 
+                            // Find new spots
                             ArrayList<MarkerGroup> tempOpenMarkers = new ArrayList<MarkerGroup>();
                             int tempAvailableMarkers = 0;
                             for (int index : closedMarkerIndexes) {
@@ -1313,6 +1379,7 @@ public class Generator{
                                 }
                             }
 
+                            // Place unique sigils in new spots
                             for (String sigil : uniqueSigils) {
                                 int index = r.next(0, tempAvailableMarkers - 1);
                                 for (MarkerGroup group : tempOpenMarkers) {
@@ -1329,6 +1396,7 @@ public class Generator{
                         }
                         checkGates = false;
                     }
+                // Already done softlock prevention, need to unlock last world
                 } else if (!checkGates) {
                     switch (pickedArranger) {
                         case A_GATE: {
@@ -1357,9 +1425,9 @@ public class Generator{
                         }
                         default: {}
                     }
-
                 }
 
+                // Place the sigils
                 for (String sigil : sigils) {
                     int index = r.next(0, availableMarkers - 1);
                     for (MarkerGroup group : openMarkerGroups) {
@@ -1378,6 +1446,11 @@ public class Generator{
                 }
             }
 
+            /*
+                Scavenger will break early without placing all the sigils so we need assign
+                 the rest here
+                The order only matters for checksum
+            */
             if (scavenger != ScavengerMode.OFF) {
                 ArrayList<String> allMarkers = new ArrayList<String>();
                 for (MarkerGroup group : markers) {
@@ -1395,18 +1468,28 @@ public class Generator{
                     }
                 }
             }
+        // Fully random uses it's own generator, simply knuth randomization
         } else if (mode == RandomizerMode.FULLY_RANDOM) {
             for (int i = 0; i < MARKERS_SIMPLE.length; i++) {
                 String otherMarker = MARKERS_SIMPLE[r.next(0, i)];
                 progress.setVar(MARKERS_SIMPLE[i], progress.getVar(otherMarker));
                 progress.setVar(otherMarker, i + 1);
             }
+        /*
+          No randomization uses it's own generator, the MARKERS_SIMPLE list is ordered so
+           that this works
+        */
         } else if (mode == RandomizerMode.NONE) {
             for (int i = 0; i < MARKERS_SIMPLE.length; i++) {
                 progress.setVar(MARKERS_SIMPLE[i], i + 1);
             }
         }
 
+        /*
+          Mobius mode also generates these, which have no effect on checksum or the rng
+           state (because by now everything's been placed), but I figured maybe someone
+           wants to look at these, might as well leave them
+        */
         if (loop) {
             int F0Pos = r.next(1, 50);
             int F3Pos = r.next(1, 49);

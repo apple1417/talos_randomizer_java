@@ -1,6 +1,11 @@
 """
-    This is very specialized, I cut a lot of code for other options/modes
-    Future seed, when F3 star is fixed: 178957
+    This is used to rank all the seeds
+    I recreated it all in python just so I could use itertools for part of the ranking
+    The generator behaves the exact same as the java run, with the same optimzations,
+     but it of course runs slower, because it's python
+
+    Eventually we're probably going to work out a better ranking systemand I'll ditch
+     this in favour of using on of the generic java generators
 """
 import itertools
 import re

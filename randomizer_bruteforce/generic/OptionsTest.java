@@ -6,6 +6,12 @@ import randomizer_bruteforce.Enums.RandomizerMode;
 import randomizer_bruteforce.Enums.ScavengerMode;
 import randomizer_bruteforce.TalosProgress;
 
+/*
+  Generates a seed + checksum with each combination of options that'd affect it
+  Can be used both to double check stuff is generating correctly and to (slowly)
+   get an idea of how often it actually fails in game (e.g. intended/short
+   scavenger/portals basicly always fails, there's no good fix though)
+*/
 class OptionsTest {
     private static Random rand = new Random();
     public static void main(String[] args) {

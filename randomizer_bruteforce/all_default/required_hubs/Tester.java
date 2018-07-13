@@ -166,7 +166,10 @@ class Tester extends RunnableThread {
         return new int[] {one_hub, two_hub, three_hub};
     }
 
-
+    /*
+      I really wish there was a way to have this bit predefined somewhere but I need to make
+       sure it uses the right class for the threads which just gets awkward
+    */
     private static int THREAD_NUM = 8;
     private static int PER_LOOP = 100000;
     private static int PER_THREAD = (PER_LOOP / THREAD_NUM);
