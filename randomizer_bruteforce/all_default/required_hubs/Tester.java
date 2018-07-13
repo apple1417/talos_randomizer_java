@@ -1,7 +1,7 @@
 package randomizer_bruteforce.all_default.required_hubs;
 
 import randomizer_bruteforce.all_default.generic.Generator;
-import randomizer_bruteforce.generic.RunnableThread;
+import randomizer_bruteforce.RunnableThread;
 import randomizer_bruteforce.TalosProgress;
 
 class Tester extends RunnableThread {
@@ -168,10 +168,10 @@ class Tester extends RunnableThread {
 
 
     private static int THREAD_NUM = 8;
-    private static long PER_LOOP = 100000;
-    private static long PER_THREAD = (PER_LOOP / THREAD_NUM);
-    private static long current_seed = 0;
-    private static long max_seed = 0x7FFFFFFF;
+    private static int PER_LOOP = 100000;
+    private static int PER_THREAD = (PER_LOOP / THREAD_NUM);
+    private static int current_seed = 0;
+    private static int max_seed = 0x7FFFFFFF;
     private static int data[] = new int[3];
 
     public static void main(String[] args) {
