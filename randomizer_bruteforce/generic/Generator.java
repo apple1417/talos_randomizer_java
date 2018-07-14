@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import randomizer_bruteforce.Enums.*;
-import randomizer_bruteforce.GeneratorInterface;
 import randomizer_bruteforce.MarkerGroup;
 import randomizer_bruteforce.Rand;
 import randomizer_bruteforce.TalosProgress;
@@ -17,7 +16,7 @@ import randomizer_bruteforce.TalosProgress;
    without needing you to do any work beforehand
 */
 
-public class Generator implements GeneratorInterface {
+public class Generator {
     public static final String GEN_TYPE = "Generic";
     public static final String GEN_VERSION = "v11.0.1";
 

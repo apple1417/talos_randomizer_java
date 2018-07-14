@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import randomizer_bruteforce.Enums.Arranger;
-import randomizer_bruteforce.GeneratorInterface;
 import randomizer_bruteforce.MarkerGroup;
 import randomizer_bruteforce.Rand;
 import randomizer_bruteforce.TalosProgress;
 
-public class Generator implements GeneratorInterface{
+public class Generator {
     public static final String GEN_TYPE = "All default";
     public static final String GEN_VERSION = "v11.0.1";
     /*
