@@ -17,8 +17,8 @@ import randomizer_bruteforce.TalosProgress;
 */
 
 public class Generator {
-    public static final String GEN_TYPE = "Generic";
-    public static final String GEN_VERSION = "v11.0.1";
+    public static String GEN_TYPE = "Generic";
+    public static String GEN_VERSION = "v11.0.1";
 
     /*
       Define all our constants

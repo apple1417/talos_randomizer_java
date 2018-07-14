@@ -1,9 +1,5 @@
 package randomizer_bruteforce.all_default.one_hub_F6;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,6 +7,7 @@ import randomizer_bruteforce.Enums.Arranger;
 import randomizer_bruteforce.MarkerGroup;
 import randomizer_bruteforce.Rand;
 import randomizer_bruteforce.TalosProgress;
+import randomizer_bruteforce.all_default.generic.GeneratorAllDefault;
 
 /*
   This is very similar to the generic generator, with all the same optimizations, but there's
@@ -21,9 +18,9 @@ import randomizer_bruteforce.TalosProgress;
    slightly slower than) the generic default settings one
 */
 
-class Generator extends Thread implements Runnable {
-    public static final String GEN_TYPE = "All default, one hub F6";
-    public static final String GEN_VERSION = "v11.0.1";
+class GeneratorF6 extends GeneratorAllDefault {
+    public static String GEN_TYPE = "All default, one hub F6";
+    public static String GEN_VERSION = "v11.0.1";
     private static HashMap<String, Integer> TETRO_INDEXES = new HashMap<String, Integer>();
     private static HashMap<Arranger, String[]> BACKUP_LOCKED = new HashMap<Arranger, String[]>();
     private HashMap<Arranger, String[]> locked = new HashMap<Arranger, String[]>(BACKUP_LOCKED);
@@ -31,15 +28,6 @@ class Generator extends Thread implements Runnable {
         "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "ADevIsland",
         "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8",
         "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "CMessenger"
-    };
-    private static String[] A_MARKERS = {
-        "A1-PaSL", "A1-Beaten Path", "A1-Outnumbered", "A1-OtToU", "A1-ASooR", "A1-Trio", "A1-Peephole", "A1-Star",
-        "A2-Guards", "A2-Hall of Windows", "A2-Suicide Mission", "A2-Star",
-        "A3-Stashed for Later", "A3-ABTU", "A3-ABTU Star", "A3-Swallowed the Key", "A3-AEP", "A3-Clock Star",
-        "A4-Branch it Out", "A4-Above All That", "A4-Push it Further", "A4-Star", "A4-DCtS",
-        "A5-Two Boxes", "A5-Two Boxes Star", "A5-YKYMCTS", "A5-Over the Fence", "A5-OLB", "A5-FC", "A5-FC Star",
-        "A6-Mobile Mindfield", "A6-Deception", "A6-Door too Far", "A6-Bichromatic", "A6-Star",
-        "A7-LFI", "A7-Trapped Inside", "A7-Two Buzzers", "A7-Star", "A7-WiaL", "A7-Pinhole"
     };
 
     private MarkerGroup[] BACKUP_MARKERS = {
@@ -144,7 +132,7 @@ class Generator extends Thread implements Runnable {
         )))
     };
 
-    Generator() {
+    GeneratorF6() {
         BACKUP_LOCKED.put(Arranger.A1_GATE, new String[] {});
         BACKUP_LOCKED.put(Arranger.A_GATE, new String[] {"DI1", "DJ3", "DL1", "DZ2"});
         BACKUP_LOCKED.put(Arranger.B_GATE, new String[] {});
@@ -335,34 +323,5 @@ class Generator extends Thread implements Runnable {
             }
         }
         return progress;
-    }
-
-    public boolean check(long seed) {
-        return check(generate(seed));
-    }
-
-    public boolean check(TalosProgress progress) {
-        if (progress == null) {
-            return false;
-        }
-        int lCount = 0;
-        int zCount = 0;
-        for (String marker : A_MARKERS) {
-            String sigil = TalosProgress.TETROS[progress.getVar(marker) - 1];
-            if (sigil.startsWith("NL")) {
-                lCount++;
-            } else if (sigil.startsWith("NZ")) {
-                zCount++;
-            }
-        }
-        if (lCount >= 2 && zCount >= 2) {
-            String output = String.format("%d, %s, %d", progress.getVar("Randomizer_Seed"), progress.getChecksum(), progress.getVar("Code_Floor6"));
-            System.out.println(output);
-            try {
-                Files.write(Paths.get("randomizer_bruteforce/all_default/one_hub_F6/output.txt"), (output + "\n").getBytes(), StandardOpenOption.APPEND);
-            } catch (IOException e) {}
-            return true;
-        }
-        return false;
     }
 }

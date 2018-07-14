@@ -1,6 +1,6 @@
 package randomizer_bruteforce.all_default.required_hubs;
 
-import randomizer_bruteforce.all_default.generic.Generator;
+import randomizer_bruteforce.all_default.generic.GeneratorAllDefault;
 import randomizer_bruteforce.RunnableThread;
 import randomizer_bruteforce.TalosProgress;
 
@@ -53,7 +53,7 @@ class Tester extends RunnableThread {
         super(name);
     }
 
-    private Generator gen = new Generator();
+    private GeneratorAllDefault gen = new GeneratorAllDefault();
     private int one_hub = 0;
     private int two_hub = 0;
     private int three_hub = 0;

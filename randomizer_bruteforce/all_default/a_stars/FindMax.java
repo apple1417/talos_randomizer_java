@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import randomizer_bruteforce.RunnableThread;
 import randomizer_bruteforce.TalosProgress;
-import randomizer_bruteforce.all_default.generic.Generator;
+import randomizer_bruteforce.all_default.generic.GeneratorAllDefault;
 
 class FindMax extends RunnableThread {
     private static String[] A_MARKERS = {
@@ -25,7 +25,7 @@ class FindMax extends RunnableThread {
         super(name);
     }
 
-    private Generator gen = new Generator();
+    private GeneratorAllDefault gen = new GeneratorAllDefault();
     public void run() {
         for(long seed = min; seed <= max; seed ++) {
             TalosProgress progress;
@@ -77,7 +77,7 @@ class FindMax extends RunnableThread {
             max_seed = Math.max(current_seed, Math.min(0x7FFFFFFF, Long.parseLong(args[1])));
         } catch (ArrayIndexOutOfBoundsException|NumberFormatException e){}
 
-        System.out.println(String.format("Using generator: %s, %s", Generator.GEN_TYPE, Generator.GEN_VERSION));
+        System.out.println(String.format("Using Generator: %s, %s", GeneratorAllDefault.GEN_TYPE, GeneratorAllDefault.GEN_VERSION));
 
         while (current_seed + PER_LOOP < max_seed) {
             // Need to create new threads because you can't restart them

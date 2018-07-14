@@ -7,10 +7,11 @@ import randomizer_bruteforce.Enums.Arranger;
 import randomizer_bruteforce.MarkerGroup;
 import randomizer_bruteforce.Rand;
 import randomizer_bruteforce.TalosProgress;
+import randomizer_bruteforce.generic.Generator;
 
-public class Generator {
-    public static final String GEN_TYPE = "All default";
-    public static final String GEN_VERSION = "v11.0.1";
+public class GeneratorAllDefault extends Generator {
+    public static String GEN_TYPE = "All default";
+    public static String GEN_VERSION = "v11.0.1";
     /*
       Define all our constants
       A few variables get destroyed during generation so they have backup versions
@@ -133,7 +134,7 @@ public class Generator {
         )))
     };
 
-    public Generator() {
+    public GeneratorAllDefault() {
         BACKUP_LOCKED.put(Arranger.A1_GATE, new String[] {});
         // No random portals means we alwasy start in A, so A gate would be fixed
         BACKUP_LOCKED.put(Arranger.A_GATE, new String[] {"DI1", "DJ3", "DL1", "DZ2"});
