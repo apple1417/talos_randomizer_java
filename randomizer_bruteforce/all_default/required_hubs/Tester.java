@@ -173,8 +173,8 @@ class Tester extends RunnableThread {
     private static int THREAD_NUM = 8;
     private static int PER_LOOP = 100000;
     private static int PER_THREAD = (PER_LOOP / THREAD_NUM);
-    private static int current_seed = 0;
-    private static int max_seed = 0x7FFFFFFF;
+    private static long current_seed = 0;
+    private static long max_seed = 0x7FFFFFFF;
     private static int data[] = new int[3];
 
     public static void main(String[] args) {
