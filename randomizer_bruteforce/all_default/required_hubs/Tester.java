@@ -54,24 +54,33 @@ class Tester extends RunnableThread {
     }
 
     private GeneratorAllDefault gen = new GeneratorAllDefault();
-    private int one_hub = 0;
-    private int two_hub = 0;
-    private int three_hub = 0;
+    /*
+      These the amount of seeds as follows:
+      0: Total      4: F6
+      1: F2         5: F2+F6
+      2: F3         6: F3+F6
+      3: F2+F3      7. F2+F3+F6
+    */
+    private int[] oneHub = new int[8];
+    private int[] twoHub = new int[8];
+    private int[] threeHub = new int[8];
     public void run() {
-        for(long i = min; i <= max; i++) {
+        for(long seed = min; seed <= max; seed++) {
             TalosProgress progress;
             try {
-                progress = gen.generate(i);
+                progress = gen.generate(seed);
             } catch (Exception e) {
-                System.out.println(String.format("Seed %d fails to generate", i));
+                System.out.println(String.format("Seed %d fails to generate", seed));
                 continue;
             }
 
             // Evaluate the seed
 
             // One hub seeds
-            if (isCompleteable(progress, A_MARKERS)) {
-                one_hub++;
+            int endingA = endingType(progress, A_MARKERS);
+            if (endingA != 0) {
+                oneHub[0]++;
+                oneHub[endingA]++;
                 continue;
             }
 
@@ -86,37 +95,50 @@ class Tester extends RunnableThread {
                 }
             }
 
+            int endingAB = endingType(progress, A_B_MARKERS);
+            int endingAC = endingType(progress, A_C_MARKERS);
+
             // Both hubs
             if (DI_count >= 2 && DJ_count >= 3) {
-                if (isCompleteable(progress, A_B_MARKERS)
-                    || isCompleteable(progress, A_C_MARKERS)) {
-                    two_hub++;
+                if (endingAB != 0) {
+                    twoHub[0]++;
+                    twoHub[endingAB]++;
+                } else if (endingAC != 0) {
+                    twoHub[0]++;
+                    twoHub[endingAC]++;
                 } else {
-                    three_hub++;
+                    threeHub[0]++;
+                    threeHub[7]++;
                 }
 
             // B first
             } else if (DI_count >= 2) {
-                if (isCompleteable(progress, A_B_MARKERS)) {
-                    two_hub++;
+                if (endingAB != 0) {
+                    twoHub[0]++;
+                    twoHub[endingAB]++;
                 } else {
-                    three_hub++;
+                    threeHub[0]++;
+                    threeHub[7]++;
                 }
 
             // C first
             } else if (DJ_count >= 3) {
-                if (isCompleteable(progress, A_C_MARKERS)) {
-                    two_hub++;
+                if (endingAC != 0) {
+                    twoHub[0]++;
+                    twoHub[endingAC]++;
                 } else {
-                    three_hub++;
+                    threeHub[0]++;
+                    threeHub[7]++;
                 }
 
+            } else {
+                System.err.println(String.format("Unable to determine first hub of seed %d", seed));
             }
         }
     }
 
     // Only good way to do this is get the count of each type of shape
-    private boolean isCompleteable(TalosProgress progress, String[] markersToCheck) {
+    private int endingType(TalosProgress progress, String[] markersToCheck) {
         int E_count = 0;
         int ML_count = 0;
         int MT_count = 0;
@@ -151,19 +173,97 @@ class Tester extends RunnableThread {
                 }
             }
         }
-                // F6
-        return (E_count >= 9 && NL_count >= 2 && NZ_count >= 2)
-                // F2
-                || (ML_count >= 1 && MT_count >= 2 && MZ_count >= 1
-                    && NL_count >= 6 && NO_count >= 1 && NT_count >= 4 && NZ_count >= 2)
-                 // F3
-                || (NI_count >= 4 && NJ_count >= 2 && NL_count >= 4 && NS_count >= 1
-                    && NZ_count >= 3);
+
+        // We might get more than one possible ending at once
+        int output = 0;
+        // F2
+        if (ML_count >= 1 && MT_count >= 2 && MZ_count >= 1
+            && NL_count >= 6 && NO_count >= 1 && NT_count >= 4 && NZ_count >= 2) {
+            output += 1;
+        }
+        // F3
+        if (NI_count >= 4 && NJ_count >= 2 && NL_count >= 4 && NS_count >= 1 && NZ_count >= 3) {
+            output += 2;
+        }
+        // F6
+        if (E_count >= 9 && NL_count >= 2 && NZ_count >= 2) {
+            output += 4;
+        }
+        return output;
     }
 
-    public int[] getData() {
-        waitFinished();
-        return new int[] {one_hub, two_hub, three_hub};
+    /*
+      This is a bad way to store it I know but I need a single method returning
+       it all if I want to eventually just have a generic functon to start all
+       the threads
+    */
+    private int[][] getData() {
+        return new int[][] {oneHub, twoHub, threeHub};
+    }
+
+    private static int[] overallTotal = new int[8];
+    private static int[] oneHubTotal = new int[8];
+    private static int[] twoHubTotal = new int[8];
+    private static int[] threeHubTotal = new int[8];
+    private static void processData(int[][] data) {
+        int[] oneHub = data[0];
+        int[] twoHub = data[1];
+        int[] threeHub = data[2];
+        for (int i = 0; i < 8; i++) {
+            overallTotal[i] += oneHub[i] + twoHub[i] + threeHub[i];
+            oneHubTotal[i] += oneHub[i];
+            twoHubTotal[i] += twoHub[i];
+            threeHubTotal[i] += threeHub[i];
+        }
+    }
+
+    private static String[] rowNames = new String[] {
+        "Total", "F2", "F3", "F2+F3", "F6", "F2+F6", "F3+F6", "F2+F3+F6"
+    };
+    private static String ROW_SEPERATOR = "+------------+------------+------------+------------+------------+------------+------------+------------+------------+";
+    private static void printData() {
+        System.out.println(ROW_SEPERATOR);
+        System.out.println("|            | F2         | F3         | F6         | F2+F3      | F2+F6      | F3+F6      | F2+F3+F6   | Total      |");
+        System.out.println(ROW_SEPERATOR);
+        // Changed the order of these so it looks nicer
+        System.out.println(String.format("| One Hub    | %10d | %10d | %10d | %10d | %10d | %10d | %10d | %10d |",
+                                         oneHubTotal[1], oneHubTotal[2], oneHubTotal[4], oneHubTotal[3],
+                                         oneHubTotal[5], oneHubTotal[6], oneHubTotal[7], oneHubTotal[0]));
+        System.out.println(ROW_SEPERATOR);
+        System.out.println(String.format("| Two Hubs   | %10d | %10d | %10d | %10d | %10d | %10d | %10d | %10d |",
+                                         twoHubTotal[1], twoHubTotal[2], twoHubTotal[4], twoHubTotal[3],
+                                         twoHubTotal[5], twoHubTotal[6], twoHubTotal[7], twoHubTotal[0]));
+        System.out.println(ROW_SEPERATOR);
+        System.out.println(String.format("| Three Hubs | %10d | %10d | %10d | %10d | %10d | %10d | %10d | %10d |",
+                                         threeHubTotal[1], threeHubTotal[2], threeHubTotal[4], threeHubTotal[3],
+                                         threeHubTotal[5], threeHubTotal[6], threeHubTotal[7], threeHubTotal[0]));
+        System.out.println(ROW_SEPERATOR);
+        System.out.println(String.format("| Total      | %10d | %10d | %10d | %10d | %10d | %10d | %10d | %10d |",
+                                         overallTotal[1], overallTotal[2], overallTotal[4], overallTotal[3],
+                                         overallTotal[5], overallTotal[6], overallTotal[7], overallTotal[0]));
+        System.out.println(ROW_SEPERATOR);
+        int total = overallTotal[0];
+        System.out.println(ROW_SEPERATOR);
+        System.out.println(String.format("| One Hub    | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% |",
+                                         (float)oneHubTotal[1]*100/total, (float)oneHubTotal[2]*100/total, (float)oneHubTotal[4]*100/total,
+                                         (float)oneHubTotal[3]*100/total, (float)oneHubTotal[5]*100/total, (float)oneHubTotal[6]*100/total,
+                                         (float)oneHubTotal[7]*100/total, (float)oneHubTotal[0]*100/total));
+        System.out.println(ROW_SEPERATOR);
+        System.out.println(String.format("| Two Hubs   | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% |",
+                                         (float)twoHubTotal[1]*100/total, (float)twoHubTotal[2]*100/total, (float)twoHubTotal[4]*100/total,
+                                         (float)twoHubTotal[3]*100/total, (float)twoHubTotal[5]*100/total, (float)twoHubTotal[6]*100/total,
+                                         (float)twoHubTotal[7]*100/total, (float)twoHubTotal[0]*100/total));
+        System.out.println(ROW_SEPERATOR);
+        System.out.println(String.format("| Three Hubs | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% |",
+                                         (float)threeHubTotal[1]*100/total, (float)threeHubTotal[2]*100/total, (float)threeHubTotal[4]*100/total,
+                                         (float)threeHubTotal[3]*100/total, (float)threeHubTotal[5]*100/total, (float)threeHubTotal[6]*100/total,
+                                         (float)threeHubTotal[7]*100/total, (float)threeHubTotal[0]*100/total));
+        System.out.println(ROW_SEPERATOR);
+        System.out.println(String.format("| Total      | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% | %9.2f%% |",
+                                         (float)overallTotal[1]*100/total, (float)overallTotal[2]*100/total, (float)overallTotal[4]*100/total,
+                                         (float)overallTotal[3]*100/total, (float)overallTotal[5]*100/total, (float)overallTotal[6]*100/total,
+                                         (float)overallTotal[7]*100/total, (float)overallTotal[0]*100/total));
+        System.out.println(ROW_SEPERATOR);
     }
 
     /*
@@ -173,49 +273,41 @@ class Tester extends RunnableThread {
     private static int THREAD_NUM = 8;
     private static int PER_LOOP = 100000;
     private static int PER_THREAD = (PER_LOOP / THREAD_NUM);
-    private static long current_seed = 0;
+    private static long currentSeed = 0;
     private static long max_seed = 0x7FFFFFFF;
-    private static int data[] = new int[3];
 
     public static void main(String[] args) {
         // So Ctrl-C gives some output
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                System.out.println(String.format("Stopped while working on batch starting at %d", current_seed));
-                System.out.println(String.format("%d %d %d", data[0], data[1], data[2]));
-                System.out.println(String.format("%.2f%% %.2f%% %.2f%%", (float)data[0]*100/current_seed, (float)data[1]*100/current_seed, (float)data[2]*100/current_seed));
+                printData();
             }
         });
 
-        while (current_seed + PER_LOOP < max_seed) {
+        while (currentSeed + PER_LOOP < max_seed) {
             // Need to create new threads because you can't restart them
             Tester[] threads = new Tester[THREAD_NUM];
             for (int i = 0; i < THREAD_NUM; i++) {
                 threads[i] = new Tester(Integer.toString(i));
-                threads[i].start(current_seed, current_seed + PER_THREAD - 1);
-                current_seed += PER_THREAD;
+                threads[i].start(currentSeed, currentSeed + PER_THREAD - 1);
+                currentSeed += PER_THREAD;
             }
             // Get data out
             for (Tester thread : threads) {
-                int[] output = thread.getData();
-                data[0] += output[0];
-                data[1] += output[1];
-                data[2] += output[2];
+                thread.waitFinished();
+                processData(thread.getData());
             }
             // Occasionally print info
-            if (current_seed % 10000000 == 0) {
-                System.out.println(current_seed);
-                System.out.println(String.format("%d %d %d", data[0], data[1], data[2]));
-                System.out.println(String.format("%.2f%% %.2f%% %.2f%%", (float)data[0]*100/current_seed, (float)data[1]*100/current_seed, (float)data[2]*100/current_seed));
+            if (currentSeed % 10000000 == 0) {
+                printData();
             }
         }
         // At this point we probably can't evenly split stuff so one thread can do the rest
         Tester thread = new Tester("0");
-        thread.start(current_seed, 0x7FFFFFFF);
-        int[] output = thread.getData();
-        data[0] += output[0];
-        data[1] += output[1];
-        data[2] += output[2];
+        thread.start(currentSeed, 0x7FFFFFFF);
+        currentSeed = 0x7FFFFFFF;
+        thread.waitFinished();
+        processData(thread.getData());
         System.out.println("Finished\n=============================================");
         // The program ending also triggers the output printing
     }
