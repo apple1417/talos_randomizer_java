@@ -80,8 +80,8 @@ public class SeedScheduler {
 
         System.out.println(String.format("Using Generator: %s", createGen.get().getGenInfo()));
 
-        int PER_THREAD = (BATCH_SIZE / THREAD_NUM);
         while (current_seed + BATCH_SIZE < max_seed) {
+            int PER_THREAD = (BATCH_SIZE / THREAD_NUM);
             // Need to create new threads because you can't restart them
             SeedChecker[] threads = new SeedChecker[THREAD_NUM];
             for (int i = 0; i < THREAD_NUM; i++) {
