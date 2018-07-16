@@ -17,8 +17,16 @@ import randomizer_bruteforce.TalosProgress;
 */
 
 public class Generator {
-    public static String GEN_TYPE = "Generic";
-    public static String GEN_VERSION = "v11.0.1";
+    /*
+      We want both a static and non-static version of this function, so stuff that
+       deals with *any* generator can print the relevant type
+    */
+    public static String getInfo() {
+        return "Generic, v11.0.2";
+    }
+    public String getGenInfo() {
+        return getInfo();
+    }
 
     /*
       Define all our constants

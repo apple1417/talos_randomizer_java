@@ -10,8 +10,13 @@ import randomizer_bruteforce.TalosProgress;
 import randomizer_bruteforce.generic.Generator;
 
 public class GeneratorAllDefault extends Generator {
-    public static String GEN_TYPE = "All default";
-    public static String GEN_VERSION = "v11.0.1";
+    public static String getInfo() {
+        return "All Default Settings, v11.0.2";
+    }
+    public String getGenInfo() {
+        return getInfo();
+    }
+
     /*
       Define all our constants
       A few variables get destroyed during generation so they have backup versions

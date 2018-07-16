@@ -19,8 +19,13 @@ import randomizer_bruteforce.all_default.generic.GeneratorAllDefault;
 */
 
 class GeneratorF6 extends GeneratorAllDefault {
-    public static String GEN_TYPE = "All default, one hub F6";
-    public static String GEN_VERSION = "v11.0.1";
+    public static String getInfo() {
+        return "All default settings, one hub F6, v11.0.2";
+    }
+    public String getGenInfo() {
+        return getInfo();
+    }
+
     private static HashMap<String, Integer> TETRO_INDEXES = new HashMap<String, Integer>();
     private static HashMap<Arranger, String[]> BACKUP_LOCKED = new HashMap<Arranger, String[]>();
     private HashMap<Arranger, String[]> locked = new HashMap<Arranger, String[]>(BACKUP_LOCKED);

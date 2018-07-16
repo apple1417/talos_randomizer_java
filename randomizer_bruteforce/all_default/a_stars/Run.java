@@ -1,9 +1,10 @@
-package randomizer_bruteforce.all_default.one_hub_F6;
+package randomizer_bruteforce.all_default.a_stars;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import randomizer_bruteforce.all_default.generic.GeneratorAllDefault;
 import randomizer_bruteforce.SeedScheduler;
 import randomizer_bruteforce.TalosProgress;
 
@@ -16,11 +17,13 @@ class Run {
             max = Integer.parseInt(args[1]);
         } catch (ArrayIndexOutOfBoundsException|NumberFormatException e){}
 
-        SeedScheduler s = new SeedScheduler(() -> new GeneratorF6(),
+        SeedScheduler s = new SeedScheduler(() -> new GeneratorAllDefault(),
                                             (TalosProgress p) -> evaluate(p));
         s.start(min, max);
     }
 
+    // How many stars are notable enough to be printed, found through experimentation
+    private static int NOTABLE_MIN = 21;
     private static String[] A_MARKERS = {
         "A1-PaSL", "A1-Beaten Path", "A1-Outnumbered", "A1-OtToU", "A1-ASooR", "A1-Trio", "A1-Peephole", "A1-Star",
         "A2-Guards", "A2-Hall of Windows", "A2-Suicide Mission", "A2-Star",
@@ -31,26 +34,20 @@ class Run {
         "A7-LFI", "A7-Trapped Inside", "A7-Two Buzzers", "A7-Star", "A7-WiaL", "A7-Pinhole"
     };
     private static void evaluate(TalosProgress progress) {
-        // This generator can return null if it's an invalid seed
-        if (progress == null) {
-            return;
-        }
-        // Need to make sure we can get to F1 within A
-        int lCount = 0;
-        int zCount = 0;
+        int starCount = 0;
         for (String marker : A_MARKERS) {
-            String sigil = TalosProgress.TETROS[progress.getVar(marker) - 1];
-            if (sigil.startsWith("NL")) {
-                lCount++;
-            } else if (sigil.startsWith("NZ")) {
-                zCount++;
+            int index = progress.getVar(marker);
+            // Stars are the first 30 indexes
+            if (index <= 30 && index != -1) {
+                starCount++;
             }
         }
-        if (lCount >= 2 && zCount >= 2) {
-            String output = String.format("%d, %s, %d", progress.getVar("Randomizer_Seed"), progress.getChecksum(), progress.getVar("Code_Floor6"));
+
+        if (starCount >= NOTABLE_MIN) {
+            String output = String.format("%d (%d)", progress.getVar("Randomizer_Seed"), starCount);
             System.out.println(output);
             try {
-                Files.write(Paths.get("randomizer_bruteforce/all_default/one_hub_F6/output.txt"), (output + "\n").getBytes(), StandardOpenOption.APPEND);
+                Files.write(Paths.get("randomizer_bruteforce/all_default/a_stars/output.txt"), (output + "\n").getBytes(), StandardOpenOption.APPEND);
             } catch (IOException e) {}
         }
     }
