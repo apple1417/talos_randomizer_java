@@ -39,7 +39,7 @@ public class TalosProgress {
         return new TalosProgress(data);
     }
 
-    public static String[] TETROS = {
+    public static final String[] TETROS = {"Incorrect Index",
         "**1",  "**2",  "**3",  "**4",  "**5",  "**6",   "**7",  "**8",  "**9",  "**10",
         "**11", "**12", "**13", "**14", "**15", "**16",  "**17", "**18", "**19", "**20",
         "**21", "**22", "**23", "**24", "**25", "**26",  "**27", "**28", "**29", "**30",
@@ -52,7 +52,8 @@ public class TalosProgress {
         "NL1",  "NL2",  "NL3",  "NL4",  "NL5",  "NL6",   "NL7",  "NL8",  "NL9",  "NL10",
         "NO1",  "NO2",  "NO3",  "NO4",  "NO5",  "NO6",   "NO7",  "NS1",  "NS2",  "NS3",
         "NS4",  "NT1",  "NT2",  "NT3",  "NT4",  "NT5",   "NT6",  "NT7",  "NT8",  "NT9",
-        "NT10", "NT11", "NT12", "NZ1",  "NZ2",  "NZ3",   "NZ4",  "NZ5",  "NZ6"
+        "NT10", "NT11", "NT12", "NZ1",  "NZ2",  "NZ3",   "NZ4",  "NZ5",  "NZ6",
+        "Incorrect Index"
     };
 
     private static String[] CHECKSUM_MARKERS = {

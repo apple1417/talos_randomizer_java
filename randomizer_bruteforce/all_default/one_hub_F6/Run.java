@@ -39,7 +39,7 @@ class Run {
         int lCount = 0;
         int zCount = 0;
         for (String marker : A_MARKERS) {
-            String sigil = TalosProgress.TETROS[progress.getVar(marker) - 1];
+            String sigil = TalosProgress.TETROS[progress.getVar(marker)];
             if (sigil.startsWith("NL")) {
                 lCount++;
             } else if (sigil.startsWith("NZ")) {

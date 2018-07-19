@@ -35,26 +35,44 @@ public class Enums {
     }
 
     public enum RandomizerMode {
-        NONE,
-        DEFAULT,
-        SIXTY,
-        FULLY_RANDOM,
-        INTENDED,
-        HARDMODE,
-        SIXTY_HARDMODE;
+        NONE("No Randomization"),
+        DEFAULT("Default"),
+        SIXTY("60fps Friendly"),
+        FULLY_RANDOM("Fully Random"),
+        INTENDED("Intended"),
+        HARDMODE("Hardmode"),
+        SIXTY_HARDMODE("60fps Hardmode");
+        private String label;
+
+        private RandomizerMode(String label) {
+            this.label = label;
+        }
 
         public static RandomizerMode fromInt(int i) {
             return RandomizerMode.values()[i];
         }
+
+        public String toString() {
+            return label;
+        }
     }
 
     public enum ScavengerMode {
-        OFF,
-        SHORT,
-        FULL;
+        OFF("Off"),
+        SHORT("Short"),
+        FULL("Full");
+        private String label;
+
+        private ScavengerMode(String label) {
+            this.label = label;
+        }
 
         public static ScavengerMode fromInt(int i) {
             return ScavengerMode.values()[i];
+        }
+
+        public String toString() {
+            return label;
         }
     }
 

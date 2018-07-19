@@ -157,8 +157,8 @@ class GeneratorF6 extends GeneratorAllDefault {
         BACKUP_LOCKED.put(Arranger.F5, new String[] {"NI5", "NI6", "NJ4", "NL10", "NO4", "NO5", "NO6", "NO7", "NS4", "NT9", "NT10", "NT11", "NT12", "NZ6"});
         BACKUP_LOCKED.put(Arranger.F6, new String[] {"EL1", "EL2", "EL3", "EL4", "EO1", "ES1", "ES2", "ES3", "ES4"});
         locked = new HashMap<Arranger, String[]>(BACKUP_LOCKED);
-        for (int i = 0; i < TalosProgress.TETROS.length; i++) {
-            TETRO_INDEXES.put(TalosProgress.TETROS[i], i + 1);
+        for (int i = 1; i < TalosProgress.TETROS.length - 1; i++) {
+            TETRO_INDEXES.put(TalosProgress.TETROS[i], i);
         }
     }
 

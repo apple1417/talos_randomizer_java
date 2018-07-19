@@ -64,7 +64,7 @@ class Run {
     };
 
     /*
-      These store the total[0] of seeds as follows:
+      These store the total amount of seeds as follows:
       0: Total      4: F6
       1: F2         5: F2+F6
       2: F3         6: F3+F6
@@ -88,7 +88,7 @@ class Run {
         int DI_count = 0;
         int DJ_count = 0;
         for (String marker : A_MARKERS) {
-            String sigil = TalosProgress.TETROS[progress.getVar(marker) - 1];
+            String sigil = TalosProgress.TETROS[progress.getVar(marker)];
             if (sigil.startsWith("DI")) {
                 DI_count++;
             } else if (sigil.startsWith("DJ")) {
@@ -166,7 +166,7 @@ class Run {
         int NZ_count = 0;
 
         for (String marker : markersToCheck) {
-            String sigil = TalosProgress.TETROS[progress.getVar(marker) - 1];
+            String sigil = TalosProgress.TETROS[progress.getVar(marker)];
             if (sigil.charAt(0) == 'E') {
                E_count++;
            } else if (sigil.charAt(0) == 'M') {

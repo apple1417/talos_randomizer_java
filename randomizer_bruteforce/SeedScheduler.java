@@ -67,12 +67,13 @@ public class SeedScheduler {
     private static long max_seed = 0x7FFFFFFF;
     public void start(long min, long max) {
         // So Ctrl-C gives some output
-        Runtime.getRuntime().addShutdownHook(new Thread() {
+        Thread hook = new Thread() {
             public void run() {
-                System.out.println(String.format("Stopped while working on batch starting at %d", current_seed));
+                System.out.println(String.format("Stopped while working on batch ending at %d", current_seed));
                 print.run();
             }
-        });
+        };
+        Runtime.getRuntime().addShutdownHook(hook);
 
         start_seed = Math.max(0, min);
         current_seed = start_seed;
@@ -102,7 +103,9 @@ public class SeedScheduler {
         SeedChecker thread = new SeedChecker("0", createGen.get(), evaluate);
         thread.start(current_seed, max_seed);
         thread.waitFinished();
-        System.out.println("Finished\n=============================================");
+        System.out.println("Finished\n================================");
+        print.run();
+        Runtime.getRuntime().removeShutdownHook(hook);
     }
     public void start() {
         start(0, 0x7FFFFFFF);
