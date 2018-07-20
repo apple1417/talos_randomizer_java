@@ -9,13 +9,34 @@ public class SeedScheduler {
       I need to create a bunch of thread objects, if I tried with the main class
        then it wouldn't get anything I overwrote
     */
-    private class SeedChecker extends RunnableThread {
-        Generator gen;
-        Consumer<TalosProgress> evaluate;
+    private class SeedChecker extends Thread {
+        private String name;
+        private Generator gen;
+        private Consumer<TalosProgress> evaluate;
         SeedChecker(String name, Generator gen, Consumer<TalosProgress> evaluate) {
-            super(name);
+            this.name = name;
             this.evaluate = evaluate;
             this.gen = gen;
+        }
+
+        private Thread t;
+        private long min;
+        private long max;
+        public void start(long min, long max) {
+            this.min = min;
+            this.max = max;
+            if (t == null) {
+                t = new Thread(this, name);
+                t.start();
+            } else {
+                System.out.println(String.format("Thread %s already running", name));
+            }
+        }
+
+        public void waitFinished() {
+            try {
+                t.join();
+            } catch (InterruptedException e) {}
         }
 
         public void run() {
@@ -25,7 +46,7 @@ public class SeedScheduler {
                 try {
                     progress = gen.generate(seed);
                 } catch (Exception e) {
-                    System.err.println(String.format("Seed %d fails to generate", seed));
+                    if (WARN_FAIL) System.err.println(String.format("Seed %d fails to generate", seed));
                     continue;
                 }
                 evaluate.accept(progress);
@@ -54,11 +75,17 @@ public class SeedScheduler {
     }
 
     // Might as well have this, incase someone wants to change them
-    private static int THREAD_NUM = 8;
-    private static int BATCH_SIZE = 100000;
-    public void setThreadingStats(int threadNum, int batchSize) {
+    private int THREAD_NUM = 8;
+    private int BATCH_SIZE = 100000;
+    private boolean WARN_FAIL = true;
+    public void setThreadNum(int threadNum) {
         THREAD_NUM = threadNum;
+    }
+    public void setBatchSize(int batchSize) {
         BATCH_SIZE = batchSize;
+    }
+    public void warnOnGenFailure(boolean warn) {
+        WARN_FAIL = warn;
     }
 
     private static int PRINT_GAP = 10000000;
