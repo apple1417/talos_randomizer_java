@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import randomizer_bruteforce.Enums.*;
+import randomizer_bruteforce.Generator;
 import randomizer_bruteforce.MarkerGroup;
 import randomizer_bruteforce.Rand;
 import randomizer_bruteforce.TalosProgress;
@@ -16,17 +17,9 @@ import randomizer_bruteforce.TalosProgress;
    without needing you to do any work beforehand
 */
 
-public class Generator {
-    /*
-      We want both a static and non-static version of this function, so stuff that
-       deals with *any* generator can print the relevant type
-    */
-    public static String getInfo() {
-        return "Generic, v11.0.2";
-    }
-    public String getGenInfo() {
-        return String.format("%s\nOptions: %s, %s Portals, Mobius %s, %s",
-                             getInfo(),
+public class GeneratorGeneric implements Generator {
+    public String getInfo() {
+        return String.format("Generic, v11.0.2\nOptions: %s, %s Portals, Mobius %s, %s",
                              mode.toString(),
                              portals ? "Random" : "Standard",
                              loop ? "On" : "Off",
@@ -105,7 +98,7 @@ public class Generator {
         return starOverride && openWorlds.contains(worldName);
     }
 
-    public Generator(TalosProgress progress) {
+    public GeneratorGeneric(TalosProgress progress) {
         BACKUP_PROGRESS = progress.clone();
 
         // Check what options have been set
@@ -905,11 +898,11 @@ public class Generator {
         }
     }
 
-    public Generator(HashMap<String, Integer> options) {
+    public GeneratorGeneric(HashMap<String, Integer> options) {
         this(new TalosProgress(options));
     }
 
-    public Generator() {
+    public GeneratorGeneric() {
         this(new TalosProgress());
     }
 
@@ -1483,7 +1476,7 @@ public class Generator {
                     }
                 }
             }
-        // Fully random uses it's own generator, simply knuth randomization
+        // Fully random uses it's own generator, simple knuth randomization
         } else if (mode == RandomizerMode.FULLY_RANDOM) {
             for (int i = 0; i < MARKERS_SIMPLE.length; i++) {
                 String otherMarker = MARKERS_SIMPLE[r.next(0, i)];
@@ -1491,7 +1484,7 @@ public class Generator {
                 progress.setVar(otherMarker, i + 1);
             }
         /*
-          No randomization uses it's own generator, the MARKERS_SIMPLE list is ordered so
+          No randomization uses it's own 'generator', the MARKERS_SIMPLE list is ordered so
            that this works
         */
         } else if (mode == RandomizerMode.NONE) {

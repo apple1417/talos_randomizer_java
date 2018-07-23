@@ -1,8 +1,8 @@
 package randomizer_bruteforce;
 
-import randomizer_bruteforce.generic.Generator;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import randomizer_bruteforce.Generator;
 
 public class SeedScheduler {
     /*
@@ -60,7 +60,7 @@ public class SeedScheduler {
       The 'evaluate' function is run on every generated seed, to be used to evaluate them
       The 'print' function is run every 10 million seeds and when the program is quit
       It is intended to be used to print stats accross multiple seeds, stuff you
-       can't do from in eval
+       can't do from inside evaluate
     */
     private Supplier<Generator> createGen;
     private Consumer<TalosProgress> evaluate;
@@ -106,7 +106,7 @@ public class SeedScheduler {
         current_seed = start_seed;
         max_seed = Math.max(start_seed, Math.min(0x7FFFFFFF, max));
 
-        System.out.println(String.format("Using Generator: %s", createGen.get().getGenInfo()));
+        System.out.println(String.format("Using Generator: %s", createGen.get().getInfo()));
 
         while (current_seed + BATCH_SIZE < max_seed) {
             int PER_THREAD = (BATCH_SIZE / THREAD_NUM);

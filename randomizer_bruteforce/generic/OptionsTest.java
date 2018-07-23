@@ -24,7 +24,7 @@ class OptionsTest {
                     options.put("Randomizer_Portals", portals);
                     for (int loop = 0; loop <= 1; loop ++) {
                         options.put("Randomizer_Loop", loop);
-                        Generator g = new Generator(options);
+                        GeneratorGeneric g = new GeneratorGeneric(options);
                         int seed = rand.nextInt(1000000);
                         System.out.println(String.format("Mode: %s, Scavenger: %s, Portals: %s, Mobius: %s, Seed: %d", RandomizerMode.fromInt(mode), ScavengerMode.fromInt(scavenger), (portals == 1) ? "On" : "Off", (loop == 1) ? "All Sigils" : "Off", seed));
                         try {

@@ -4,26 +4,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import randomizer_bruteforce.Enums.Arranger;
+import randomizer_bruteforce.Generator;
 import randomizer_bruteforce.MarkerGroup;
 import randomizer_bruteforce.Rand;
 import randomizer_bruteforce.TalosProgress;
-import randomizer_bruteforce.all_default.generic.GeneratorAllDefault;
 
 /*
-  This is very similar to the generic generator, with all the same optimizations, but there's
-   one more - if a grey sigil is placed outside of A we can immediently abort generation
+  This is very similar to the generic all default generator, with all the same optimizations,
+   but there's one more - if a grey sigil is placed outside of A we can immediently stop
   F6 is generally placed quite late but this still ends up giving roughly a 10% speed boost
 
   If used to generate seeds already known to work it'll be the exact same speed as (if not
    slightly slower than) the generic default settings one
 */
 
-class GeneratorF6 extends GeneratorAllDefault {
-    public static String getInfo() {
+class GeneratorF6 implements Generator {
+    public String getInfo() {
         return "All default settings, one hub F6, v11.0.2";
-    }
-    public String getGenInfo() {
-        return getInfo();
     }
 
     private static HashMap<String, Integer> TETRO_INDEXES = new HashMap<String, Integer>();

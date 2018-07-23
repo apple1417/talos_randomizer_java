@@ -4,17 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import randomizer_bruteforce.Enums.Arranger;
+import randomizer_bruteforce.Generator;
 import randomizer_bruteforce.MarkerGroup;
 import randomizer_bruteforce.Rand;
 import randomizer_bruteforce.TalosProgress;
-import randomizer_bruteforce.generic.Generator;
 
-public class GeneratorAllDefault extends Generator {
-    public static String getInfo() {
+public class GeneratorAllDefault implements Generator {
+    public String getInfo() {
         return "All Default Settings, v11.0.2";
-    }
-    public String getGenInfo() {
-        return getInfo();
     }
 
     /*
