@@ -1,4 +1,4 @@
-package randomizer_bruteforce.generic;
+package randomizer_bruteforce;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +19,7 @@ import randomizer_bruteforce.TalosProgress;
 
 public class GeneratorGeneric implements Generator {
     public String getInfo() {
-        return String.format("Generic, v11.0.2\nOptions: %s, %s Portals, Mobius %s, %s",
+        return String.format("Generic, v11.0.3\nOptions: %s, %s Portals, Mobius %s, %s",
                              mode.toString(),
                              portals ? "Random" : "Standard",
                              loop ? "On" : "Off",
