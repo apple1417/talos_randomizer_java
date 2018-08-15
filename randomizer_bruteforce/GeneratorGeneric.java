@@ -19,7 +19,7 @@ import randomizer_bruteforce.TalosProgress;
 
 public class GeneratorGeneric implements Generator {
     public String getInfo() {
-        return String.format("Generic, v11.0.3\nOptions: %s, %s Portals, Mobius %s, %s",
+        return String.format("Generic, v11.1.0\nOptions: %s, %s Portals, Mobius %s, %s",
                              mode.toString(),
                              portals ? "Random" : "Standard",
                              loop ? "On" : "Off",

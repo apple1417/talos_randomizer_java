@@ -12,6 +12,7 @@ public class TalosProgress {
         data.put("Randomizer_ShowAll", 1);
         data.put("Randomizer_Scavenger", 0);
         data.put("Randomizer_Loop", 0);
+        data.put("Randomizer_Moody", 0);
         data.putAll(options);
     }
 
@@ -94,7 +95,8 @@ public class TalosProgress {
         "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "ADevIsland",
         "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8",
         "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "CMessenger",
-        "Randomizer_Seed", "Randomizer_Mode", "Randomizer_Scavenger", "Randomizer_Loop"
+        "Randomizer_Seed", "Randomizer_Mode", "Randomizer_Scavenger", "Randomizer_Loop",
+        "Randomizer_Moody"
     };
 
     public String getChecksum(boolean showWarning) {
