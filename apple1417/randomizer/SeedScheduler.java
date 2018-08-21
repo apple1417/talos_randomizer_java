@@ -1,8 +1,8 @@
-package randomizer_bruteforce;
+package apple1417.randomizer;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import randomizer_bruteforce.Generator;
+import apple1417.randomizer.Generator;
 
 public class SeedScheduler {
     /*

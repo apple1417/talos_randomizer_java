@@ -1,15 +1,15 @@
-package randomizer_bruteforce;
+package apple1417.randomizer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import randomizer_bruteforce.Enums.*;
-import randomizer_bruteforce.Generator;
-import randomizer_bruteforce.MarkerGroup;
-import randomizer_bruteforce.Rand;
-import randomizer_bruteforce.TalosProgress;
+import apple1417.randomizer.Enums.*;
+import apple1417.randomizer.Generator;
+import apple1417.randomizer.MarkerGroup;
+import apple1417.randomizer.Rand;
+import apple1417.randomizer.TalosProgress;
 
 /*
   A full simulator of the standard lua generator

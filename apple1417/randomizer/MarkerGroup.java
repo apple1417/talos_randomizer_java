@@ -1,8 +1,8 @@
-package randomizer_bruteforce;
+package apple1417.randomizer;
 
 import java.util.ArrayList;
 import java.util.function.Supplier;
-import randomizer_bruteforce.Enums.World;
+import apple1417.randomizer.Enums.World;
 
 public class MarkerGroup {
     private Supplier<Boolean> test;

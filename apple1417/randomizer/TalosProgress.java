@@ -1,4 +1,4 @@
-package randomizer_bruteforce;
+package apple1417.randomizer;
 
 import java.util.HashMap;
 import java.util.Iterator;

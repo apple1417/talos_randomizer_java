@@ -1,4 +1,4 @@
-package randomizer_bruteforce;
+package apple1417.randomizer;
 
 public class Rand {
     private long seed;

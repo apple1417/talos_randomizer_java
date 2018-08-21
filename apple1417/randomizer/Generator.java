@@ -1,4 +1,4 @@
-package randomizer_bruteforce;
+package apple1417.randomizer;
 
 public interface Generator {
     String getInfo();
