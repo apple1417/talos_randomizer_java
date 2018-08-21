@@ -1109,25 +1109,7 @@ public class GeneratorGeneric implements Generator {
                             accessableArrangers.add(Arranger.A1_GATE);
                         } else {
                             arrangerStage = -1;
-                            switch (scavengerGoal) {
-                                case CONNECTOR_CLIP: {
-                                    accessableArrangers.addAll(Arrays.asList(Arranger.CONNECTOR, Arranger.F1));
-                                    break;
-                                }
-                                case F2_CLIP: {
-                                    accessableArrangers.addAll(Arrays.asList(Arranger.CUBE, Arranger.F1, Arranger.F2));
-                                    break;
-                                }
-                                case F3_CLIP: {
-                                    accessableArrangers.addAll(Arrays.asList(Arranger.F1, Arranger.F3));
-                                    break;
-                                }
-                                case F6: {
-                                    accessableArrangers.addAll(Arrays.asList(Arranger.F1, Arranger.F6));
-                                    break;
-                                }
-                                default: {}
-                            }
+                            accessableArrangers.addAll(scavengerGoal.getAllowedArrangers());
                         }
                     /*
                       Intended
