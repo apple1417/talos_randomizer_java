@@ -91,45 +91,37 @@ public class Enums {
             return ScavengerEnding.values()[i];
         }
 
-        private static HashMap<ScavengerEnding, ArrayList<Arranger>> makeArrangerHashMap() {
-            HashMap<ScavengerEnding, ArrayList<Arranger>> out = new HashMap<ScavengerEnding, ArrayList<Arranger>>();
-            out.put(CONNECTOR_CLIP, new ArrayList<Arranger>(Arrays.asList(Arranger.CONNECTOR, Arranger.F1)));
-            out.put(F2_CLIP,  new ArrayList<Arranger>(Arrays.asList(Arranger.CUBE, Arranger.F1, Arranger.F2)));
-            out.put(F3_CLIP, new ArrayList<Arranger>(Arrays.asList(Arranger.F1, Arranger.F3)));
-            out.put(F6, new ArrayList<Arranger>(Arrays.asList(Arranger.F1, Arranger.F6)));
-            out.put(NONE, null);
-            return out;
-        }
-        private static HashMap<ScavengerEnding, ArrayList<Arranger>> allowedArrangers = makeArrangerHashMap();
         public ArrayList<Arranger> getAllowedArrangers() {
-            return allowedArrangers.get(this);
+            switch(this) {
+                case CONNECTOR_CLIP: return new ArrayList<Arranger>(Arrays.asList(Arranger.CONNECTOR, Arranger.F1));
+                case F2_CLIP: return new ArrayList<Arranger>(Arrays.asList(Arranger.CUBE, Arranger.F1, Arranger.F2));
+                case F3_CLIP: return new ArrayList<Arranger>(Arrays.asList(Arranger.F1, Arranger.F3));
+                case F6: return new ArrayList<Arranger>(Arrays.asList(Arranger.F1, Arranger.F6));
+                default: return null;
+            }
         }
 
-        private static HashMap<ScavengerEnding, ArrayList<String>> makeSigilHashMap() {
-            HashMap<ScavengerEnding, ArrayList<String>> out = new HashMap<ScavengerEnding, ArrayList<String>>();
-            out.put(CONNECTOR_CLIP, new ArrayList<String>(Arrays.asList(
-                "ML1", "MT1", "MT2",
-                "NL1", "NL2", "NZ1", "NZ2"
-            )));
-            out.put(F2_CLIP,  new ArrayList<String>(Arrays.asList(
-                "ML2", "MT3", "MT4", "MZ1",
-                "NL1", "NL2", "NZ1", "NZ2",
-                "NL3", "NL4", "NL5", "NL6", "NO1", "NT1", "NT2", "NT3", "NT4"
-            )));
-            out.put(F3_CLIP, new ArrayList<String>(Arrays.asList(
-                "NL1", "NL2", "NZ1", "NZ2",
-                "NI1", "NI2", "NI3", "NI4", "NJ1", "NJ2", "NL7", "NL8", "NS1", "NZ3"
-            )));
-            out.put(F6, new ArrayList<String>(Arrays.asList(
-                "NL1", "NL2", "NZ1", "NZ2",
-                "EL1", "EL2", "EL3", "EL4", "EO1", "ES1", "ES2", "ES3", "ES4"
-            )));
-            out.put(NONE, null);
-            return out;
-        }
-        private static HashMap<ScavengerEnding, ArrayList<String>> allowedSigils = makeSigilHashMap();
         public ArrayList<String> getAllowedSigils() {
-            return allowedSigils.get(this);
+            switch (this) {
+                case CONNECTOR_CLIP: return new ArrayList<String>(Arrays.asList(
+                    "ML1", "MT1", "MT2",
+                    "NL1", "NL2", "NZ1", "NZ2"
+                ));
+                case F2_CLIP: return new ArrayList<String>(Arrays.asList(
+                    "ML2", "MT3", "MT4", "MZ1",
+                    "NL1", "NL2", "NZ1", "NZ2",
+                    "NL3", "NL4", "NL5", "NL6", "NO1", "NT1", "NT2", "NT3", "NT4"
+                ));
+                case F3_CLIP: return new ArrayList<String>(Arrays.asList(
+                    "NL1", "NL2", "NZ1", "NZ2",
+                    "NI1", "NI2", "NI3", "NI4", "NJ1", "NJ2", "NL7", "NL8", "NS1", "NZ3"
+                ));
+                case F6: return new ArrayList<String>(Arrays.asList(
+                    "NL1", "NL2", "NZ1", "NZ2",
+                    "EL1", "EL2", "EL3", "EL4", "EO1", "ES1", "ES2", "ES3", "ES4"
+                ));
+                default: return null;
+            }
         }
     }
 
