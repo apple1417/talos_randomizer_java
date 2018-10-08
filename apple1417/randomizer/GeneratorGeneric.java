@@ -19,10 +19,10 @@ import apple1417.randomizer.TalosProgress;
 
 public class GeneratorGeneric implements Generator {
     public String getInfo() {
-        return String.format("Generic, v11.1.0\nOptions: %s, %s Portals, Mobius %s, %s",
+        return String.format("Generic, v11.2.0\nOptions: %s, %s Portals, Mobius %s, %s",
                              mode.toString(),
                              portals ? "Random" : "Standard",
-                             loop ? "On" : "Off",
+                             loop != 0 ? "On" : "Off",
                              scavenger == ScavengerMode.OFF ? "Scavenger Off"
                                                             : (scavenger.toString() + " Scavenger")
                              );
@@ -71,7 +71,7 @@ public class GeneratorGeneric implements Generator {
     private RandomizerMode mode;
     private ScavengerMode scavenger;
     private boolean portals;
-    private boolean loop;
+    private int loop;
     private HashSet<World> openWorlds;
 
     // These two helper functions are used in the marker lists to define when groups unlock
@@ -86,7 +86,7 @@ public class GeneratorGeneric implements Generator {
         if (mode == RandomizerMode.INTENDED && !unlocked(Arranger.A1_GATE)) {
             return false;
         }
-        if (scavenger != ScavengerMode.OFF || loop) {
+        if (scavenger != ScavengerMode.OFF || loop != 0) {
             return true;
         }
 
@@ -105,9 +105,9 @@ public class GeneratorGeneric implements Generator {
         mode = RandomizerMode.fromInt(progress.getVar("Randomizer_Mode"));
         scavenger = ScavengerMode.fromInt(progress.getVar("Randomizer_Scavenger"));
         portals = progress.getVar("Randomizer_Portals") != -1;
-        loop = progress.getVar("Randomizer_Loop") != 0;
+        loop = progress.getVar("Randomizer_Loop");
 
-        if (scavenger == ScavengerMode.OFF && !loop) {
+        if (scavenger == ScavengerMode.OFF && loop == 0) {
             BACKUP_ARRANGER_SIGILS.put(Arranger.A1_GATE, new ArrayList<String>());
             BACKUP_ARRANGER_SIGILS.put(Arranger.A_GATE, new ArrayList<String>());
             BACKUP_ARRANGER_SIGILS.put(Arranger.B_GATE, new ArrayList<String>());
@@ -141,7 +141,7 @@ public class GeneratorGeneric implements Generator {
         /*
           All the marker groups
           These are the exact same as in the normal lua script, using regex you can convert
-           them from one format almost straight into the other with minial effort
+           them from one format almost straight into the other with minimal effort
         */
         switch(mode) {
             case DEFAULT: {
@@ -943,7 +943,7 @@ public class GeneratorGeneric implements Generator {
         // Randomize the portals
         World[] portalOrder = World.values();
         Hub startHub = Hub.A;
-        if (loop) {
+        if (loop != 0) {
             if (portals) {
                 for (int index = 1; index < portalOrder.length; index++) {
                     int otherIndex = r.next(0, index - 1);
@@ -1047,7 +1047,7 @@ public class GeneratorGeneric implements Generator {
 
             boolean checkGates = true;
             // Small extra setup for mobius and scavenger, which don't care about greens
-            if (loop || scavenger == ScavengerMode.FULL) {
+            if (loop != 0 || scavenger == ScavengerMode.FULL) {
                 checkGates = false;
                 indexesToAdd = new ArrayList<Integer>();
                 indexesToAdd.addAll(aIndexes);
@@ -1480,7 +1480,7 @@ public class GeneratorGeneric implements Generator {
            state (because by now everything's been placed), but I figured maybe someone
            wants to look at these, might as well leave them
         */
-        if (loop) {
+        if (loop != 0) {
             int F0Pos = r.next(1, 50);
             int F3Pos = r.next(1, 49);
             if (F3Pos >= F0Pos) {
@@ -1489,6 +1489,10 @@ public class GeneratorGeneric implements Generator {
             progress.setVar("Randomizer_LoopF0", F0Pos);
             progress.setVar("Randomizer_LoopF3", F3Pos);
             progress.setVar("Randomizer_LoopSeed", r.next(1, 0x7FFFFFFF));
+
+            if ((loop & MobiusOptions.RANDOM_ARRANGERS.getMask()) != 0) {
+                progress.setVar("Randomizer_LoopArrangers", r.next(0, 0x7FFF));
+            }
         }
 
         progress.setVar("Randomizer_Generated", 1);

@@ -38,6 +38,94 @@ public class Enums {
         }
     }
 
+    public enum MobiusOptions {
+        ALL_SIGILS("All Sigils",             0b000001),
+        ALL_SHAPE("All of a Shape",          0b000010),
+        ALL_COLOUR("All of a Colour",        0b000100),
+        ETERNALIZE("Eternalize Ending",      0b001000),
+        TWO_TOWER("Two Tower Floors",        0b010000),
+        RANDOM_ARRANGERS("Random Arrangers", 0b100000);
+
+        private String label;
+        private int mask;
+
+        private MobiusOptions(String label, int mask) {
+            this.label = label;
+            this.mask = mask;
+        }
+
+        public int getMask() {
+            return mask;
+        }
+
+        public static MobiusOptions fromInt(int i) {
+            return MobiusOptions.values()[i];
+        }
+
+        public String toString() {
+            return label;
+        }
+    }
+
+    public enum MobiusRandomArrangers {
+        A1_GATE("A1 Gate", 0x0001),
+        A_GATE("A Gate", 0x0002),
+        B_GATE("B Gate", 0x0004),
+        C_GATE("C Gate", 0x0008),
+        CONNECTOR("Connector", 0x0010),
+        CUBE("Cube", 0x0020),
+        FAN("Fan", 0x0040),
+        RECORDER("Recorder", 0x0080),
+        PLATFORM("Platform", 0x0100),
+        F1("Floor 1", 0x0200),
+        F2("Floor 2", 0x0400),
+        F3("Floor 3", 0x0800),
+        F4("Floor 4", 0x1000),
+        F5("Floor 5", 0x2000),
+        F6("Floor 6", 0x4000);
+
+        private String label;
+        private int mask;
+
+        private MobiusRandomArrangers(String label, int mask) {
+            this.label = label;
+            this.mask = mask;
+        }
+
+        public int getMask() {
+            return mask;
+        }
+
+        public static MobiusRandomArrangers fromInt(int i) {
+            return MobiusRandomArrangers.values()[i];
+        }
+
+        public String toString() {
+            return label;
+        }
+    }
+
+    public enum MoodySigils {
+        OFF("Off"),
+        COLOUR("Colour"),
+        SHAPE("Shape"),
+        BOTH("Colour + Shape");
+
+        private String label;
+
+        private MoodySigils(String label) {
+            this.label = label;
+        }
+
+        public static MoodySigils fromInt(int i) {
+            return MoodySigils.values()[i];
+        }
+
+        public String toString() {
+            return label;
+        }
+    }
+
     public enum RandomizerMode {
         NONE("No Randomization"),
         DEFAULT("Default"),
@@ -54,25 +142,6 @@ public class Enums {
 
         public static RandomizerMode fromInt(int i) {
             return RandomizerMode.values()[i];
-        }
-
-        public String toString() {
-            return label;
-        }
-    }
-
-    public enum ScavengerMode {
-        OFF("Off"),
-        SHORT("Short"),
-        FULL("Full");
-        private String label;
-
-        private ScavengerMode(String label) {
-            this.label = label;
-        }
-
-        public static ScavengerMode fromInt(int i) {
-            return ScavengerMode.values()[i];
         }
 
         public String toString() {
@@ -125,33 +194,42 @@ public class Enums {
         }
     }
 
-    public enum World {
-        A1 ("A1", Hub.A), A2 ("A2", Hub.A), A3 ("A3", Hub.A), A4 ("A4", Hub.A),
-        A5 ("A5", Hub.A), A6 ("A6", Hub.A), A7 ("A7", Hub.A), A8 ("A8", Hub.A),
-        ADEVISLAND ("ADevIsland", Hub.A),
-        B1 ("B1", Hub.B), B2 ("B2", Hub.B), B3 ("B3", Hub.B), B4 ("B4", Hub.B),
-        B5 ("B5", Hub.B), B6 ("B6", Hub.B), B7 ("B7", Hub.B), B8 ("B8", Hub.B),
-        C1 ("C1", Hub.C), C2 ("C2", Hub.C), C3 ("C3", Hub.C), C4 ("C4", Hub.C),
-        C5 ("C5", Hub.C), C6 ("C6", Hub.C), C7 ("C7", Hub.C), C8 ("C8", Hub.C),
-        CMESSENGER ("CMessenger", Hub.C);
+    public enum ScavengerMode {
+        OFF("Off"),
+        SHORT("Short"),
+        FULL("Full");
         private String label;
-        private Hub worldHub;
 
-        private World(String label, Hub worldHub) {
+        private ScavengerMode(String label) {
             this.label = label;
-            this.worldHub = worldHub;
         }
 
-        public Hub getHub() {
-            return worldHub;
+        public static ScavengerMode fromInt(int i) {
+            return ScavengerMode.values()[i];
         }
+
+        public String toString() {
+            return label;
+        }
+    }
+
+    public enum World {
+        A1, A2, A3, A4, A5, A6, A7, A8, ADEVISLAND,
+        B1, B2, B3, B4, B5, B6, B7, B8,
+        C1, C2, C3, C4, C5, C6, C7, C8, CMESSENGER;
 
         public static World fromInt(int i) {
             return World.values()[i];
         }
 
         public String toString() {
-            return label;
+            if (this == ADEVISLAND) {
+                return "ADevIsland";
+            } else if (this == CMESSENGER) {
+                return "CMessenger";
+            } else {
+                return super.toString();
+            }
         }
     }
 }
