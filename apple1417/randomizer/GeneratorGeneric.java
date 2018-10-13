@@ -19,7 +19,7 @@ import apple1417.randomizer.TalosProgress;
 
 public class GeneratorGeneric implements Generator {
     public String getInfo() {
-        return String.format("Generic, v11.2.0\nOptions: %s, %s Portals, Mobius %s, %s",
+        return String.format("Generic, v12.0.0\nOptions: %s, %s Portals, Mobius %s, %s",
                              mode.toString(),
                              portals ? "Random" : "Standard",
                              loop != 0 ? "On" : "Off",
@@ -351,10 +351,10 @@ public class GeneratorGeneric implements Generator {
                         "B5-Two Jammers"
                     )), World.B5),
                     new MarkerGroup(() -> isWorldOpen(World.B6), new ArrayList<String>(Arrays.asList(
-                        "B6-Egyptian Arcade"
+                        "B6-Egyptian Arcade", "B6-Crisscross"
                     )), World.B6),
                     new MarkerGroup(() -> isWorldOpen(World.B6) && unlocked(Arranger.CONNECTOR), new ArrayList<String>(Arrays.asList(
-                        "B6-JDaW", "B6-Crisscross"
+                        "B6-JDaW"
                     )), World.B6),
                     new MarkerGroup(() -> isWorldOpen(World.B7), new ArrayList<String>(Arrays.asList(
                         "B7-WLJ", "B7-AFaF"
@@ -815,7 +815,7 @@ public class GeneratorGeneric implements Generator {
                     new MarkerGroup(() -> isWorldOpen(World.B4), new ArrayList<String>(Arrays.asList(
                         "B4-Self Help", "B4-WAtC"
                     )), World.B4),
-                    new MarkerGroup(() -> isWorldOpen(World.B4) && unlocked(Arranger.CUBE), new ArrayList<String>(Arrays.asList(
+                    new MarkerGroup(() -> isWorldOpen(World.B4) && unlocked(Arranger.CONNECTOR), new ArrayList<String>(Arrays.asList(
                         "B4-TRA", "B4-TRA Star", "B4-Sphinx Star"
                     )), World.B4),
                     new MarkerGroup(() -> isWorldOpen(World.B4) && unlocked(Arranger.CONNECTOR) && (unlocked(Arranger.CUBE) || unlocked(Arranger.FAN)), new ArrayList<String>(Arrays.asList(
