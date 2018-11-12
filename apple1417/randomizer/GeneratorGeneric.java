@@ -1491,7 +1491,11 @@ public class GeneratorGeneric implements Generator {
             progress.setVar("Randomizer_LoopSeed", r.next(1, 0x7FFFFFFF));
 
             if ((loop & MobiusOptions.RANDOM_ARRANGERS.getMask()) != 0) {
-                progress.setVar("Randomizer_LoopArrangers", r.next(0, 0x7FFF));
+                int randArrangers = r.next(0, 0x7FFF);
+                if (progress.getVar("Randomizer_UnlockItems") == 1) {
+                    randArrangers &= 0x7e0f;
+                }
+                progress.setVar("Randomizer_LoopArrangers", randArrangers);
             }
         }
 
