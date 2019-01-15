@@ -13,7 +13,7 @@ public class Enums {
         NONE;
 
         public static Arranger fromInt(int i) {
-            return Arranger.values()[i];
+            return values()[i];
         }
     }
 
@@ -21,7 +21,7 @@ public class Enums {
         A, B, C;
 
         public static Hub fromInt(int i) {
-            return Hub.values()[i];
+            return values()[i];
         }
 
         public static Hub fromWorldInt(int i) {
@@ -59,7 +59,19 @@ public class Enums {
         }
 
         public static MobiusOptions fromInt(int i) {
-            return MobiusOptions.values()[i];
+            return values()[i];
+        }
+
+        public static ArrayList<MobiusOptions> fromTalosProgress(TalosProgress progress) {
+            int unlocks = progress.getVar("Randomizer_Loop");
+            if (unlocks == 0) {return null;}
+            ArrayList<MobiusOptions> arrangers = new ArrayList<MobiusOptions>();
+            for (MobiusOptions mo : values()) {
+                if ((unlocks & mo.getMask()) != 0) {
+                    arrangers.add(mo);
+                }
+            }
+            return arrangers;
         }
 
         public String toString() {
@@ -97,7 +109,19 @@ public class Enums {
         }
 
         public static MobiusRandomArrangers fromInt(int i) {
-            return MobiusRandomArrangers.values()[i];
+            return values()[i];
+        }
+
+        public static ArrayList<MobiusRandomArrangers> fromTalosProgress(TalosProgress progress) {
+            int unlocks = progress.getVar("Randomizer_LoopArrangers");
+            if (unlocks == 0) {return null;}
+            ArrayList<MobiusRandomArrangers> arrangers = new ArrayList<MobiusRandomArrangers>();
+            for (MobiusRandomArrangers mra : values()) {
+                if ((unlocks & mra.getMask()) != 0) {
+                    arrangers.add(mra);
+                }
+            }
+            return arrangers;
         }
 
         public String toString() {
@@ -118,7 +142,11 @@ public class Enums {
         }
 
         public static MoodySigils fromInt(int i) {
-            return MoodySigils.values()[i];
+            return values()[i];
+        }
+
+        public static MoodySigils fromTalosProgress(TalosProgress progress) {
+            return values()[progress.getVar("Randomizer_Moody")];
         }
 
         public String toString() {
@@ -141,7 +169,11 @@ public class Enums {
         }
 
         public static RandomizerMode fromInt(int i) {
-            return RandomizerMode.values()[i];
+            return values()[i];
+        }
+
+        public static RandomizerMode fromTalosProgress(TalosProgress progress) {
+            return values()[progress.getVar("Randomizer_Mode")];
         }
 
         public String toString() {
@@ -157,7 +189,11 @@ public class Enums {
         NONE;
 
         public static ScavengerEnding fromInt(int i) {
-            return ScavengerEnding.values()[i];
+            return values()[i];
+        }
+
+        public static ScavengerEnding fromTalosProgress(TalosProgress progress) {
+            return values()[progress.getVar("Randomizer_ScavengerMode")];
         }
 
         public ArrayList<Arranger> getAllowedArrangers() {
@@ -205,7 +241,11 @@ public class Enums {
         }
 
         public static ScavengerMode fromInt(int i) {
-            return ScavengerMode.values()[i];
+            return values()[i];
+        }
+
+        public static ScavengerMode fromTalosProgress(TalosProgress progress) {
+            return values()[progress.getVar("Randomizer_Scavenger")];
         }
 
         public String toString() {

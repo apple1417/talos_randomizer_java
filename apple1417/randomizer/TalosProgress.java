@@ -96,7 +96,7 @@ public class TalosProgress {
         "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8",
         "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "CMessenger",
         "Randomizer_Seed", "Randomizer_Mode", "Randomizer_Scavenger", "Randomizer_Loop",
-        "Randomizer_Moody"
+        "Randomizer_Moody", "Randomizer_ExtraSeed"
     };
 
     public String getChecksum(boolean showWarning) {

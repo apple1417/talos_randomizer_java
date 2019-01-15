@@ -19,7 +19,7 @@ import apple1417.randomizer.TalosProgress;
 
 public class GeneratorGeneric implements Generator {
     public String getInfo() {
-        return String.format("Generic, v12.0.0\nOptions: %s, %s Portals, Mobius %s, %s",
+        return String.format("Generic, v12.2.0\nOptions: %s, %s Portals, Mobius %s, %s",
                              mode.toString(),
                              portals ? "Random" : "Standard",
                              loop != 0 ? "On" : "Off",
@@ -86,7 +86,7 @@ public class GeneratorGeneric implements Generator {
         if (mode == RandomizerMode.INTENDED && !unlocked(Arranger.A1_GATE)) {
             return false;
         }
-        if (scavenger != ScavengerMode.OFF || loop != 0) {
+        if (scavenger == ScavengerMode.FULL || loop != 0) {
             return true;
         }
 
@@ -102,8 +102,8 @@ public class GeneratorGeneric implements Generator {
         BACKUP_PROGRESS = progress.clone();
 
         // Check what options have been set
-        mode = RandomizerMode.fromInt(progress.getVar("Randomizer_Mode"));
-        scavenger = ScavengerMode.fromInt(progress.getVar("Randomizer_Scavenger"));
+        mode = RandomizerMode.fromTalosProgress(progress);
+        scavenger = ScavengerMode.fromTalosProgress(progress);
         portals = progress.getVar("Randomizer_Portals") != -1;
         loop = progress.getVar("Randomizer_Loop");
 
@@ -1488,7 +1488,6 @@ public class GeneratorGeneric implements Generator {
             }
             progress.setVar("Randomizer_LoopF0", F0Pos);
             progress.setVar("Randomizer_LoopF3", F3Pos);
-            progress.setVar("Randomizer_LoopSeed", r.next(1, 0x7FFFFFFF));
 
             if ((loop & MobiusOptions.RANDOM_ARRANGERS.getMask()) != 0) {
                 int randArrangers = r.next(0, 0x7FFF);
@@ -1499,6 +1498,7 @@ public class GeneratorGeneric implements Generator {
             }
         }
 
+        progress.setVar("Randomizer_ExtraSeed", r.next(1, 0x7FFFFFFF));
         progress.setVar("Randomizer_Generated", 1);
 
         return progress;
