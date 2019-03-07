@@ -19,7 +19,7 @@ import apple1417.randomizer.TalosProgress;
 
 public class GeneratorGeneric implements Generator {
     public String getInfo() {
-        return String.format("Generic, v12.2.0\nOptions: %s, %s Portals, Mobius %s, %s",
+        return String.format("Generic, v12.2.2\nOptions: %s, %s Portals, Mobius %s, %s",
                              mode.toString(),
                              portals ? "Random" : "Standard",
                              loop != 0 ? "On" : "Off",
@@ -1234,7 +1234,7 @@ public class GeneratorGeneric implements Generator {
                                 break;
                             }
                             case 5: {
-                                if (closedMarkerIndexes.size() == 0) {
+                                if (accessableArrangers.size() == 0) {
                                     accessableArrangers.addAll(Arrays.asList(Arranger.F4, Arranger.F5, Arranger.F6, Arranger.A1_GATE));
                                     arrangerStage = -1;
                                 }
